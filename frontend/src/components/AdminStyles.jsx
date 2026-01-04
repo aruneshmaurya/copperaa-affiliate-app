@@ -62,7 +62,8 @@ const AdminStyles = () => (
             margin-left: 280px;
             padding: 3rem;
             max-width: 1600px;
-            width: calc(100% - 280px); /* Ensure main content takes remaining width */
+            width: calc(100% - 280px);
+            color: var(--text-main);
         }
 
         .admin-topbar {
@@ -140,13 +141,14 @@ const AdminStyles = () => (
         /* Cards & Stats */
         .stat-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr); /* Force 4 columns on desktop */
+            grid-template-columns: repeat(4, 1fr);
             gap: 1.5rem;
             margin-bottom: 3rem;
         }
 
         .card {
             background: var(--bg-card);
+            color: var(--text-main); /* Explicitly set color */
             border-radius: var(--radius-default);
             padding: 2rem;
             box-shadow: var(--shadow-card);

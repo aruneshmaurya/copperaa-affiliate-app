@@ -73,7 +73,7 @@ const AdminDashboard = () => {
     const StatCard = ({ label, value, color }) => (
         <div className="card">
             <div className="stat-label">{label}</div>
-            <div className="stat-val" style={{ color: color || 'var(--text-main)' }}>{value}</div>
+            <div className="stat-val" style={{ color: color || '#1F2937' }}>{value}</div>
         </div>
     );
 
