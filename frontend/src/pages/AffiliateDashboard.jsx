@@ -84,7 +84,7 @@ const AffiliateDashboard = () => {
                         <span>Total Clicks</span>
                         <span style={{ color: '#6366F1', background: 'rgba(99, 102, 241, 0.1)', padding: '6px', borderRadius: '8px' }}><Icons.Mouse /></span>
                     </div>
-                    <div className="stat-val">${stats.totalClicks}</div>
+                    <div className="stat-val">{stats.totalClicks}</div>
                 </div>
             </div>
 
@@ -156,8 +156,8 @@ const AffiliateDashboard = () => {
                                     <td style={{ fontWeight: 700, color: '#B87333' }}>${comm.commissionAmount}</td>
                                     <td>
                                         <span className={`badge ${comm.status === 'paid' ? 'success' :
-                                                comm.status === 'approved' ? 'info' :
-                                                    comm.status === 'cancelled' ? 'error' : 'warning'
+                                            comm.status === 'approved' ? 'info' :
+                                                comm.status === 'cancelled' ? 'error' : 'warning'
                                             }`}>
                                             {comm.status}
                                         </span>
