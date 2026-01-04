@@ -15,7 +15,6 @@ const Icons = {
 const AdminLayout = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const [sidebarOpen, setSidebarOpen] = React.useState(false);
 
     const handleLogout = () => {
         authService.logout();
@@ -32,42 +31,24 @@ const AdminLayout = () => {
         <div className="admin-layout">
             <AdminStyles />
 
-            {/* Mobile Sidebar Overlay */}
-            <div
-                className={`sidebar-overlay ${sidebarOpen ? 'open' : ''}`}
-                onClick={() => setSidebarOpen(false)}
-            />
-
             {/* Sidebar */}
-            <aside className={`admin-sidebar ${sidebarOpen ? 'open' : ''}`}>
+            <aside className="admin-sidebar">
                 <div className="sb-brand-container">
                     <img src={Logo} alt="Copperaa" className="sb-logo" />
                 </div>
                 <nav className="sb-nav">
                     <li className="sb-item">
-                        <NavLink
-                            to="/admin/dashboard"
-                            className={({ isActive }) => `sb-link ${isActive ? 'active' : ''}`}
-                            onClick={() => setSidebarOpen(false)}
-                        >
+                        <NavLink to="/admin/dashboard" className={({ isActive }) => `sb-link ${isActive ? 'active' : ''}`}>
                             <span className="sb-icon"><Icons.Dashboard /></span> Dashboard
                         </NavLink>
                     </li>
                     <li className="sb-item">
-                        <NavLink
-                            to="/admin/affiliates"
-                            className={({ isActive }) => `sb-link ${isActive ? 'active' : ''}`}
-                            onClick={() => setSidebarOpen(false)}
-                        >
+                        <NavLink to="/admin/affiliates" className={({ isActive }) => `sb-link ${isActive ? 'active' : ''}`}>
                             <span className="sb-icon"><Icons.Users /></span> Affiliates
                         </NavLink>
                     </li>
                     <li className="sb-item">
-                        <NavLink
-                            to="/admin/commissions"
-                            className={({ isActive }) => `sb-link ${isActive ? 'active' : ''}`}
-                            onClick={() => setSidebarOpen(false)}
-                        >
+                        <NavLink to="/admin/commissions" className={({ isActive }) => `sb-link ${isActive ? 'active' : ''}`}>
                             <span className="sb-icon"><Icons.Dollar /></span> Commissions
                         </NavLink>
                     </li>
@@ -79,23 +60,20 @@ const AdminLayout = () => {
                     </li>
                 </nav>
             </aside>
-
-            {/* Main Content */}
             <main className="admin-main">
                 {/* Topbar */}
                 <div className="admin-topbar">
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <button className="mobile-menu-btn" onClick={() => setSidebarOpen(true)}>
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-                        </button>
-                        <h1 style={{ fontSize: '1.5rem', fontWeight: 600, color: '#111827', margin: 0 }}>{getPageTitle()}</h1>
-                    </div>
-                    {/* Placeholder for admin profile or notification */}
-                    <div style={{ width: '40px', height: '40px', background: '#E5E7EB', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <span style={{ fontWeight: 600, color: '#4B5563' }}>AD</span>
+                    <h1 style={{ fontSize: '1.75rem', fontWeight: 700, color: '#111827', margin: 0 }}>{getPageTitle()}</h1>
+
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', background: 'white', padding: '0.5rem 1rem', borderRadius: '50px', boxShadow: '0 2px 5px rgba(0,0,0,0.05)', border: '1px solid #E5E7EB' }}>
+                        <div style={{ textAlign: 'right' }}>
+                            <div style={{ fontWeight: 600, fontSize: '0.9rem', color: '#1F2937' }}>Administrator</div>
+                        </div>
+                        <div style={{ width: '40px', height: '40px', background: '#374151', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 'bold' }}>
+                            AD
+                        </div>
                     </div>
                 </div>
-
                 <Outlet />
             </main>
         </div>

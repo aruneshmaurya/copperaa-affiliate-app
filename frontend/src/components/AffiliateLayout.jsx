@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import authService from '../services/auth.service';
 import AdminStyles from './AdminStyles'; // Reuse premium styles
@@ -12,7 +12,7 @@ const Icons = {
 
 const AffiliateLayout = () => {
     const navigate = useNavigate();
-    const [sidebarOpen, setSidebarOpen] = useState(false);
+    const user = authService.getCurrentUser();
 
     const handleLogout = () => {
         authService.logout();
@@ -23,33 +23,18 @@ const AffiliateLayout = () => {
         <div className="admin-layout">
             <AdminStyles />
 
-            {/* Mobile Sidebar Overlay */}
-            <div
-                className={`sidebar-overlay ${sidebarOpen ? 'open' : ''}`}
-                onClick={() => setSidebarOpen(false)}
-            />
-
-            <aside className={`admin-sidebar ${sidebarOpen ? 'open' : ''}`} style={{ background: 'linear-gradient(180deg, #2D3748 0%, #1A202C 100%)' }}>
+            <aside className="admin-sidebar" style={{ background: 'linear-gradient(180deg, #111827 0%, #000000 100%)' }}>
                 <div className="sb-brand-container">
                     <img src={Logo} alt="Copperaa" className="sb-logo" />
                 </div>
                 <nav className="sb-nav">
                     <li className="sb-item">
-                        <NavLink
-                            to="/affiliate/dashboard"
-                            end
-                            className={({ isActive }) => `sb-link ${isActive ? 'active' : ''}`}
-                            onClick={() => setSidebarOpen(false)}
-                        >
+                        <NavLink to="/affiliate/dashboard" end className={({ isActive }) => `sb-link ${isActive ? 'active' : ''}`}>
                             <span className="sb-icon"><Icons.Home /></span> Overview
                         </NavLink>
                     </li>
                     <li className="sb-item">
-                        <NavLink
-                            to="/affiliate/settings"
-                            className={({ isActive }) => `sb-link ${isActive ? 'active' : ''}`}
-                            onClick={() => setSidebarOpen(false)}
-                        >
+                        <NavLink to="/affiliate/settings" className={({ isActive }) => `sb-link ${isActive ? 'active' : ''}`}>
                             <span className="sb-icon"><Icons.Settings /></span> Settings
                         </NavLink>
                     </li>
@@ -61,13 +46,20 @@ const AffiliateLayout = () => {
                 </nav>
             </aside>
             <main className="admin-main">
-                {/* Mobile Header */}
-                <div className="admin-topbar" style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center' }}>
-                    <button className="mobile-menu-btn" onClick={() => setSidebarOpen(true)}>
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-                    </button>
-                    {/* Only show title on mobile since sidebar is hidden */}
-                    <h2 style={{ fontSize: '1.25rem', margin: 0, fontWeight: 600 }}>Affiliate Panel</h2>
+                {/* Desktop Header */}
+                <div className="admin-topbar">
+                    <h2 style={{ fontSize: '1.5rem', margin: 0, fontWeight: 700, color: '#111827' }}>Affiliate Dashboard</h2>
+
+                    {/* User Profile Dropdown / Area */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', background: 'white', padding: '0.5rem 1rem', borderRadius: '50px', boxShadow: '0 2px 5px rgba(0,0,0,0.05)', border: '1px solid #E5E7EB' }}>
+                        <div style={{ textAlign: 'right' }}>
+                            <div style={{ fontWeight: 600, fontSize: '0.9rem', color: '#1F2937' }}>{user.name}</div>
+                            <div style={{ fontSize: '0.75rem', color: '#6B7280' }}>Code: {user.affiliateCode}</div>
+                        </div>
+                        <div style={{ width: '40px', height: '40px', background: 'linear-gradient(135deg, #B87333 0%, #A8652A 100%)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 'bold' }}>
+                            {user.name.charAt(0).toUpperCase()}
+                        </div>
+                    </div>
                 </div>
                 <Outlet />
             </main>

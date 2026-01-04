@@ -29,9 +29,10 @@ const AdminStyles = () => (
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--bg-page);
+            background-color: var(--bg-body);
             color: var(--text-main);
+            font-family: 'Poppins', sans-serif;
+            -webkit-font-smoothing: antialiased;
             margin: 0;
         }
 
@@ -42,7 +43,7 @@ const AdminStyles = () => (
         }
 
         .admin-sidebar {
-            width: 260px;
+            width: 280px;
             background: linear-gradient(180deg, #1F2937 0%, #111827 100%);
             color: white;
             display: flex;
@@ -53,58 +54,61 @@ const AdminStyles = () => (
             top: 0;
             z-index: 50;
             box-shadow: 4px 0 24px rgba(0,0,0,0.2);
+            padding-bottom: 2rem;
         }
 
         .admin-main {
             flex: 1;
-            margin-left: 260px;
-            padding: 2.5rem;
+            margin-left: 280px;
+            padding: 3rem;
             max-width: 1600px;
+            width: calc(100% - 280px); /* Ensure main content takes remaining width */
         }
 
         .admin-topbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 2.5rem;
+            margin-bottom: 3rem;
         }
 
         /* Sidebar Items */
         .sb-brand-container {
-            padding: 2rem;
+            padding: 2.5rem 2rem;
             display: flex;
             justify-content: center;
             border-bottom: 1px solid rgba(255,255,255,0.05);
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
         }
         
         .sb-logo {
-            max-width: 140px;
+            max-width: 160px;
             height: auto;
             display: block;
         }
 
         .sb-nav {
-            padding: 0 1rem;
+            padding: 0 1.5rem;
             list-style: none;
             margin: 0;
             flex: 1;
         }
 
         .sb-item {
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
         }
 
         .sb-link {
             display: flex;
             align-items: center;
-            padding: 0.85rem 1.25rem;
+            padding: 1rem 1.25rem;
             color: #9CA3AF;
             text-decoration: none;
             border-radius: 12px;
             transition: all 0.3s ease;
             font-weight: 500;
             border: 1px solid transparent;
+            font-size: 0.95rem;
         }
 
         .sb-link:hover {
@@ -118,12 +122,15 @@ const AdminStyles = () => (
             color: var(--primary);
             border: 1px solid rgba(184, 115, 51, 0.2);
             font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         .sb-icon {
             margin-right: 1rem;
             width: 20px;
             opacity: 0.8;
+            display: flex;
+            align-items: center;
         }
         .sb-link.active .sb-icon {
             opacity: 1;
@@ -133,16 +140,16 @@ const AdminStyles = () => (
         /* Cards & Stats */
         .stat-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            grid-template-columns: repeat(4, 1fr); /* Force 4 columns on desktop */
             gap: 1.5rem;
-            margin-bottom: 2.5rem;
+            margin-bottom: 3rem;
         }
 
         .card {
             background: var(--bg-card);
-            border-radius: 16px;
-            padding: 1.75rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+            border-radius: var(--radius-default);
+            padding: 2rem;
+            box-shadow: var(--shadow-card);
             border: 1px solid rgba(229, 231, 235, 0.5);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
@@ -151,7 +158,7 @@ const AdminStyles = () => (
 
         .card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.01);
+            box-shadow: var(--shadow-hover);
             border-color: rgba(184, 115, 51, 0.2);
         }
         
@@ -162,8 +169,8 @@ const AdminStyles = () => (
             top: 0;
             left: 0;
             right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary) 0%, #E29E5D 100%);
+            height: 4px;
+            background: var(--primary-gradient);
             opacity: 0;
             transition: opacity 0.3s;
         }
@@ -179,38 +186,41 @@ const AdminStyles = () => (
             display: flex;
             justify-content: space-between;
             align-items: center;
+            text-transform: uppercase;
         }
 
         .stat-val {
-            font-size: 2.25rem;
+            font-size: 2.5rem;
             font-weight: 700;
             color: var(--text-main);
-            margin-top: 0.5rem;
+            margin-top: 1rem;
             letter-spacing: -0.02em;
+            line-height: 1.1;
         }
 
         /* Modern Table */
         .table-container {
             background: var(--bg-card);
-            border-radius: 16px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
-            border: 1px solid var(--border);
+            border-radius: var(--radius-default);
+            box-shadow: var(--shadow-card);
+            border: 1px solid rgba(229, 231, 235, 0.5);
             overflow: hidden;
             transition: box-shadow 0.3s;
         }
         .table-container:hover {
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            box-shadow: var(--shadow-hover);
         }
 
         .data-table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0;
             text-align: left;
         }
 
         .data-table th {
             background: #F9FAFB;
-            padding: 1.25rem 1.5rem;
+            padding: 1.5rem;
             font-size: 0.75rem;
             font-weight: 600;
             text-transform: uppercase;
@@ -220,7 +230,7 @@ const AdminStyles = () => (
         }
 
         .data-table td {
-            padding: 1.25rem 1.5rem;
+            padding: 1.5rem;
             border-bottom: 1px solid #F3F4F6;
             font-size: 0.95rem;
             color: var(--text-main);
@@ -240,11 +250,12 @@ const AdminStyles = () => (
         .badge {
             display: inline-flex;
             align-items: center;
-            padding: 0.35rem 0.85rem;
+            padding: 0.4rem 1rem;
             border-radius: 9999px;
             font-size: 0.75rem;
             font-weight: 600;
             letter-spacing: 0.025em;
+            text-transform: uppercase;
         }
 
         .badge.success { background: #DCFCE7; color: #166534; border: 1px solid #BBF7D0; }
@@ -254,19 +265,47 @@ const AdminStyles = () => (
 
         /* Buttons */
         .btn {
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
             cursor: pointer;
-            font-size: 0.875rem;
-            transition: all 0.2s;
+            border: 1px solid transparent;
+            text-decoration: none;
+            gap: 0.5rem;
         }
 
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-primary:hover { background: var(--primary-dark); }
-        
-        .btn-sm { padding: 0.25rem 0.5rem; font-size: 0.75rem; }
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(184, 115, 51, 0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .btn-primary:hover {
+            box-shadow: 0 10px 15px -3px rgba(184, 115, 51, 0.4);
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--text-main);
+            border: 1px solid #E5E7EB;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .btn-secondary:hover {
+            background: #F9FAFB;
+            border-color: #D1D5DB;
+        }
+
+        .btn-sm {
+            padding: 0.4rem 0.85rem;
+            font-size: 0.8rem;
+        }
         
         .btn-icon {
             background: transparent;
@@ -274,6 +313,33 @@ const AdminStyles = () => (
             padding: 4px;
         }
         .btn-icon:hover { color: var(--primary); background: #F3F4F6; }
+
+        /* Inputs */
+        .form-control {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            border: 1px solid #E5E7EB;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+            background: #F9FAFB;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(184, 115, 51, 0.1);
+        }
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
 
         /* Modal */
         .modal-overlay {
@@ -288,7 +354,7 @@ const AdminStyles = () => (
         .modal-content {
             background: white;
             padding: 2rem;
-            border-radius: var(--radius);
+            border-radius: var(--radius-default);
             width: 100%;
             max-width: 500px;
             box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
