@@ -14,10 +14,14 @@ const Register = () => {
         e.preventDefault();
         try {
             await authService.register(formData);
-            setMsg('Registration successful! Please wait for admin approval.');
+            console.log('Registration Success');
+            setMsg('Registration successful! You can now log in.');
             setError('');
         } catch (err) {
-            setError(err.response?.data?.message || 'Error registering');
+            console.error('Registration Error:', err);
+            // DEBUGGING: Show full details
+            const detailedError = err.response?.data?.message || err.message || JSON.stringify(err);
+            setError(`Debug Error: ${detailedError}`);
             setMsg('');
         }
     };

@@ -44,6 +44,19 @@ const affiliateSchema = new mongoose.Schema({
         type: String,
         enum: ['affiliate', 'admin'],
         default: 'affiliate'
+    },
+    paymentMethod: {
+        type: String,
+        enum: ['paypal', 'stripe'],
+        default: null
+    },
+    paymentEmail: {
+        type: String,
+        match: [
+            /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+            'Please add a valid payment email'
+        ],
+        default: null
     }
 }, {
     timestamps: true

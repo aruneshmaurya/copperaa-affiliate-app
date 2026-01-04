@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getStats, getAffiliateCommissions } = require('../controllers/affiliate.dashboard.controller');
+const { getStats, getAffiliateCommissions, updatePaymentSettings } = require('../controllers/affiliate.dashboard.controller');
 const { protect } = require('../middleware/auth.middleware');
 
 // All routes here are for affiliates
@@ -11,5 +11,6 @@ router.use(protect); // Ensure logged in
 
 router.get('/stats', getStats);
 router.get('/commissions', getAffiliateCommissions);
+router.put('/payment', updatePaymentSettings);
 
 module.exports = router;
