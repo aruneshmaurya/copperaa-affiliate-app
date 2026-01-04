@@ -21,27 +21,15 @@ const {
     generalLimiter
 } = require('./middleware/rateLimiter');
 
-// CORS Configuration (Strict)
-const corsOptions = {
-    origin: function (origin, callback) {
-        // Allow mobile apps, Postman (no origin), and specific domains
-        const allowedOrigins = [
-            process.env.FRONTEND_URL || 'http://localhost:3000',
-            process.env.SHOPIFY_STORE_URL || 'https://copperaa.com'
-        ];
-
-        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
+// CORS Configuration (Permissive for Testing)
+app.use(cors({
+    origin: '*', // Allow all origins temporarily for testing
     methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
     credentials: true,
     optionsSuccessStatus: 200
-};
+}));
 
-app.use(cors(corsOptions));
+// app.use(helmet()); // Temporarily disable helmet if it causes issues, but usually fine. Keeping helmet.
 app.use(helmet());
 
 // Body parser (Modified to save rawBody for HMAC verification)
