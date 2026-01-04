@@ -45,7 +45,7 @@ const registerAffiliate = async (req, res) => {
             password,
             affiliateCode: uniqueCode,
             role: 'affiliate',
-            approved: false // Default pending
+            approved: true // Temporary: Auto-approve for testing
         });
 
         if (affiliate) {
