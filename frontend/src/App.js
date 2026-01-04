@@ -1,6 +1,5 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import AdminLogin from './pages/AdminLogin';
 import Affiliates from './pages/Affiliates';
 import Commissions from './pages/Commissions';
 import Sidebar from './components/Sidebar';
@@ -13,7 +12,6 @@ function App() {
     return (
         <Router>
             <Routes>
-                <Route path="/login" element={<AdminLogin />} />
                 <Route path="/login-affiliate" element={<AffiliateLogin />} />
                 <Route path="/register" element={<Register />} />
 
