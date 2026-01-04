@@ -59,32 +59,62 @@ const getAffiliateCommissions = async (req, res) => {
 // @access  Private/Affiliate
 const updatePaymentSettings = async (req, res) => {
     try {
-        const { paymentMethod, paymentEmail } = req.body;
-
-        if (!['paypal', 'bank_transfer'].includes(paymentMethod)) {
-            return res.status(400).json({ message: 'Invalid payment method' });
-        }
-        if (!paymentEmail) {
-            return res.status(400).json({ message: 'Payment email is required' });
-        }
+        const { method, paypalEmail, bankDetails } = req.body;
 
         const affiliate = await Affiliate.findById(req.user._id);
+
         if (!affiliate) {
             return res.status(404).json({ message: 'Affiliate not found' });
         }
 
-        affiliate.paymentMethod = paymentMethod;
-        affiliate.paymentEmail = paymentEmail;
+        // Validate
+        if (method === 'paypal') {
+            if (!paypalEmail) {
+                return res.status(400).json({ message: 'PayPal email is required' });
+            }
+            // Basic email regex check
+            const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+            if (!emailRegex.test(paypalEmail)) {
+                return res.status(400).json({ message: 'Invalid PayPal Email' });
+            }
+
+            // Set data
+            affiliate.payoutSettings.method = 'paypal';
+            affiliate.payoutSettings.paypalEmail = paypalEmail;
+
+        } else if (method === 'bank') {
+            if (!bankDetails ||
+                !bankDetails.accountHolderName ||
+                !bankDetails.bankName ||
+                !bankDetails.accountNumber ||
+                !bankDetails.ifscOrRouting ||
+                !bankDetails.country) {
+                return res.status(400).json({ message: 'All Bank Details fields are required' });
+            }
+
+            affiliate.payoutSettings.method = 'bank';
+            affiliate.payoutSettings.bankDetails = {
+                accountHolderName: bankDetails.accountHolderName,
+                bankName: bankDetails.bankName,
+                accountNumber: bankDetails.accountNumber,
+                ifscOrRouting: bankDetails.ifscOrRouting,
+                swiftOrIban: bankDetails.swiftOrIban || '',
+                country: bankDetails.country
+            };
+        } else {
+            return res.status(400).json({ message: 'Invalid payment method' });
+        }
+
         await affiliate.save();
 
         res.json({
-            message: 'Payment settings updated',
-            paymentMethod: affiliate.paymentMethod,
-            paymentEmail: affiliate.paymentEmail
+            message: 'Payout settings saved successfully',
+            payoutSettings: affiliate.payoutSettings
         });
 
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error('Update Payment Error:', error);
+        res.status(500).json({ message: 'Server Error: ' + error.message });
     }
 };
 

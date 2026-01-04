@@ -20,9 +20,19 @@ const AffiliateDashboard = () => {
     const [commissions, setCommissions] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // Payment Settings State
-    const [paymentMethod, setPaymentMethod] = useState('paypal');
-    const [paymentEmail, setPaymentEmail] = useState('');
+    // Payout Settings State
+    const [payoutSettings, setPayoutSettings] = useState({
+        method: 'paypal',
+        paypalEmail: '',
+        bankDetails: {
+            accountHolderName: '',
+            bankName: '',
+            accountNumber: '',
+            ifscOrRouting: '',
+            swiftOrIban: '',
+            country: ''
+        }
+    });
     const [paymentMsg, setPaymentMsg] = useState('');
     const [copyState, setCopyState] = useState('Copy Link');
 
@@ -32,16 +42,28 @@ const AffiliateDashboard = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const statsRes = await api.get('/affiliate/stats');
+                conststatsRes = await api.get('/affiliate/stats');
                 const commRes = await api.get('/affiliate/commissions');
-                // Fetch fresh user profile for payment settings
                 const meRes = await api.get('/auth/me');
 
                 setStats(statsRes.data);
                 setCommissions(commRes.data);
 
-                if (meRes.data.paymentMethod) setPaymentMethod(meRes.data.paymentMethod);
-                if (meRes.data.paymentEmail) setPaymentEmail(meRes.data.paymentEmail);
+                // Load Settings
+                if (meRes.data.payoutSettings) {
+                    setPayoutSettings({
+                        method: meRes.data.payoutSettings.method || 'paypal',
+                        paypalEmail: meRes.data.payoutSettings.paypalEmail || '',
+                        bankDetails: {
+                            accountHolderName: meRes.data.payoutSettings.bankDetails?.accountHolderName || '',
+                            bankName: meRes.data.payoutSettings.bankDetails?.bankName || '',
+                            accountNumber: meRes.data.payoutSettings.bankDetails?.accountNumber || '',
+                            ifscOrRouting: meRes.data.payoutSettings.bankDetails?.ifscOrRouting || '',
+                            swiftOrIban: meRes.data.payoutSettings.bankDetails?.swiftOrIban || '',
+                            country: meRes.data.payoutSettings.bankDetails?.country || ''
+                        }
+                    });
+                }
 
                 setLoading(false);
             } catch (err) {
@@ -59,13 +81,13 @@ const AffiliateDashboard = () => {
 
     const handlePaymentSave = async (e) => {
         e.preventDefault();
+        setPaymentMsg('');
         try {
-            await api.put('/affiliate/payment', { paymentMethod, paymentEmail });
-            setPaymentMsg('Payment settings saved successfully!');
+            await api.put('/affiliate/payment', payoutSettings);
+            setPaymentMsg('SUCCESS: Payout settings saved!');
             setTimeout(() => setPaymentMsg(''), 3000);
         } catch (err) {
-            setPaymentMsg('Error saving settings');
-            console.error(err);
+            setPaymentMsg('ERROR: ' + (err.response?.data?.message || 'Failed to save settings'));
         }
     };
 
@@ -150,45 +172,104 @@ const AffiliateDashboard = () => {
                                 <p className="card-subtitle">Configure where you want to receive your payments.</p>
                             </div>
 
-                            {paymentMsg && <div style={{ color: paymentMsg.includes('Error') ? 'red' : 'green', marginBottom: '1rem', fontWeight: 500 }}>{paymentMsg}</div>}
+                            {paymentMsg && <div style={{ color: paymentMsg.includes('ERROR') ? 'red' : 'green', marginBottom: '1rem', fontWeight: 500 }}>{paymentMsg}</div>}
 
                             <form onSubmit={handlePaymentSave}>
                                 <div className="form-group">
                                     <label className="form-label">Payment Method</label>
                                     <select
                                         className="form-control"
-                                        value={paymentMethod}
-                                        onChange={(e) => setPaymentMethod(e.target.value)}
+                                        value={payoutSettings.method}
+                                        onChange={(e) => setPayoutSettings({ ...payoutSettings, method: e.target.value })}
                                     >
                                         <option value="paypal">PayPal</option>
-                                        <option value="bank_transfer">Bank Transfer</option>
+                                        <option value="bank">Bank Transfer</option>
                                     </select>
                                 </div>
-                                <div className="form-group">
-                                    <label className="form-label">
-                                        {paymentMethod === 'paypal' ? 'PayPal Email Address' : 'Bank Account Details'}
-                                    </label>
-                                    {paymentMethod === 'paypal' ? (
+
+                                {payoutSettings.method === 'paypal' ? (
+                                    <div className="form-group">
+                                        <label className="form-label">PayPal Email Address</label>
                                         <input
                                             type="email"
                                             className="form-control"
-                                            value={paymentEmail}
-                                            onChange={(e) => setPaymentEmail(e.target.value)}
-                                            placeholder="Enter your PayPal email"
+                                            value={payoutSettings.paypalEmail}
+                                            onChange={(e) => setPayoutSettings({ ...payoutSettings, paypalEmail: e.target.value })}
+                                            placeholder="example@email.com"
                                             required
                                         />
-                                    ) : (
-                                        <textarea
-                                            className="form-control"
-                                            value={paymentEmail}
-                                            onChange={(e) => setPaymentEmail(e.target.value)}
-                                            placeholder="Bank Name, Account Number, SWIFT/IBAN, Beneficiary Name"
-                                            required
-                                            rows="3"
-                                        />
-                                    )}
-                                </div>
-                                <button type="submit" className="btn btn-primary">
+                                    </div>
+                                ) : (
+                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                                        <div className="form-group">
+                                            <label className="form-label">Account Holder Name *</label>
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                value={payoutSettings.bankDetails.accountHolderName}
+                                                onChange={(e) => setPayoutSettings({ ...payoutSettings, bankDetails: { ...payoutSettings.bankDetails, accountHolderName: e.target.value } })}
+                                                placeholder="John Doe"
+                                                required
+                                            />
+                                        </div>
+                                        <div className="form-group">
+                                            <label className="form-label">Bank Name *</label>
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                value={payoutSettings.bankDetails.bankName}
+                                                onChange={(e) => setPayoutSettings({ ...payoutSettings, bankDetails: { ...payoutSettings.bankDetails, bankName: e.target.value } })}
+                                                placeholder="HDFC Bank"
+                                                required
+                                            />
+                                        </div>
+                                        <div className="form-group">
+                                            <label className="form-label">Account Number *</label>
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                value={payoutSettings.bankDetails.accountNumber}
+                                                onChange={(e) => setPayoutSettings({ ...payoutSettings, bankDetails: { ...payoutSettings.bankDetails, accountNumber: e.target.value } })}
+                                                placeholder="1234567890"
+                                                required
+                                            />
+                                        </div>
+                                        <div className="form-group">
+                                            <label className="form-label">IFSC / Routing Code *</label>
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                value={payoutSettings.bankDetails.ifscOrRouting}
+                                                onChange={(e) => setPayoutSettings({ ...payoutSettings, bankDetails: { ...payoutSettings.bankDetails, ifscOrRouting: e.target.value } })}
+                                                placeholder="HDFC000123"
+                                                required
+                                            />
+                                        </div>
+                                        <div className="form-group">
+                                            <label className="form-label">SWIFT / IBAN (Optional)</label>
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                value={payoutSettings.bankDetails.swiftOrIban}
+                                                onChange={(e) => setPayoutSettings({ ...payoutSettings, bankDetails: { ...payoutSettings.bankDetails, swiftOrIban: e.target.value } })}
+                                                placeholder="HDFCINBBXXX"
+                                            />
+                                        </div>
+                                        <div className="form-group">
+                                            <label className="form-label">Country *</label>
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                value={payoutSettings.bankDetails.country}
+                                                onChange={(e) => setPayoutSettings({ ...payoutSettings, bankDetails: { ...payoutSettings.bankDetails, country: e.target.value } })}
+                                                placeholder="India"
+                                                required
+                                            />
+                                        </div>
+                                    </div>
+                                )}
+
+                                <button type="submit" className="btn btn-primary" style={{ marginTop: '1rem', width: '100%' }}>
                                     Save Settings
                                 </button>
                             </form>

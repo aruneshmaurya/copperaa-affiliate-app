@@ -45,18 +45,27 @@ const affiliateSchema = new mongoose.Schema({
         enum: ['affiliate', 'admin'],
         default: 'affiliate'
     },
-    paymentMethod: {
-        type: String,
-        enum: ['paypal', 'bank_transfer'],
-        default: null
-    },
-    paymentEmail: {
-        type: String,
-        match: [
-            /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-            'Please add a valid payment email'
-        ],
-        default: null
+    payoutSettings: {
+        method: {
+            type: String,
+            enum: ['paypal', 'bank'],
+            default: 'paypal'
+        },
+        paypalEmail: {
+            type: String,
+            match: [
+                /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+                'Please add a valid PayPal email'
+            ]
+        },
+        bankDetails: {
+            accountHolderName: { type: String, trim: true },
+            bankName: { type: String, trim: true },
+            accountNumber: { type: String, trim: true },
+            ifscOrRouting: { type: String, trim: true }, // IFSC for India, Routing for US/Others
+            swiftOrIban: { type: String, trim: true },
+            country: { type: String, trim: true }
+        }
     }
 }, {
     timestamps: true
