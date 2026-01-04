@@ -6,15 +6,18 @@ const AdminStyles = () => (
 
         :root {
             --primary: #B87333;
-            --primary-dark: #A0522D;
-            --bg-page: #F8F9FB;
+            --primary-gradient: linear-gradient(135deg, #C88A4A 0%, #A8652A 100%);
+            --bg-body: #F8F9FB;
             --bg-card: #FFFFFF;
-            --sidebar-bg: #1F2937;
-            --text-main: #111827;
+            --text-main: #1F2937;
             --text-muted: #6B7280;
-            --border: #E5E7EB;
             
-            /* Status Colors */
+            /* Modern Variables */
+            --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 10px 15px -3px rgba(0, 0, 0, 0.04);
+            --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.01);
+            --radius-default: 16px;
+
+            /* Legacy Status Colors */
             --status-success-bg: #D1FAE5;
             --status-success-text: #065F46;
             --status-warning-bg: #FEF3C7;
@@ -23,9 +26,6 @@ const AdminStyles = () => (
             --status-error-text: #991B1B;
             --status-info-bg: #DBEAFE;
             --status-info-text: #1E40AF;
-
-            --radius: 12px;
-            --shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
         body {

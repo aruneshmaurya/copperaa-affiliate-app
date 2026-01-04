@@ -70,10 +70,10 @@ const AdminDashboard = () => {
 
     if (loading) return <div className="p-4">Loading stats...</div>;
 
-    const StatCard = ({ label, value, colorClass, icon }) => (
+    const StatCard = ({ label, value, color }) => (
         <div className="card">
             <div className="stat-label">{label}</div>
-            <div className={`stat-val ${colorClass || ''}`}>{value}</div>
+            <div className="stat-val" style={{ color: color || 'var(--text-main)' }}>{value}</div>
         </div>
     );
 
@@ -82,7 +82,7 @@ const AdminDashboard = () => {
             {/* KPI Grid */}
             <div className="stat-grid">
                 <StatCard label="Total Affiliates" value={stats.totalAffiliates} />
-                <StatCard label="Active Affiliates" value={stats.activeAffiliates} colorClass="text-green-600" />
+                <StatCard label="Active Affiliates" value={stats.activeAffiliates} color="#10B981" />
                 <StatCard label="Total Sales Value" value={`$${stats.totalSales}`} />
                 <StatCard label="Total Commission" value={`$${stats.totalCommission}`} />
                 <div className="card" style={{ borderLeft: '4px solid #F59E0B' }}>

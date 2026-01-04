@@ -34,146 +34,164 @@ const AffiliateDashboard = () => {
 
                 setStats(statsRes.data);
                 setCommissions(commRes.data);
-                d.setDate(d.getDate() - i);
-                const dateStr = d.toLocaleDateString();
-
-                // Sum commissions for this day
-                const dayTotal = commRes.data.reduce((acc, c) => {
-                    const cDate = new Date(c.createdAt).toLocaleDateString();
-                    if (cDate === dateStr && c.status !== 'cancelled') {
-                        return acc + Number(c.commissionAmount);
-                    }
-                    return acc;
-                }, 0);
-
-                chartData.push({ date: dateStr.slice(0, 5), amount: dayTotal }); // format: MM/DD
+                setLoading(false);
+            } catch (err) {
+                console.error(err);
+                setLoading(false);
             }
-                setDailyData(chartData);
-            setLoading(false);
-        } catch (err) {
-            console.error(err);
-            setLoading(false);
-        }
+        };
+        fetchData();
+    }, []);
+
+    const copyLink = () => {
+        const referralLink = `https://copperaa.com/?aff=${user?.affiliateCode}`;
+        navigator.clipboard.writeText(referralLink);
+        setCopyState('Copied!');
+        setTimeout(() => setCopyState('Copy Link'), 2000);
     };
-    fetchData();
-}, []);
 
-const copyLink = () => {
+    if (loading) return <div className="p-4">Loading dashboard...</div>;
+
     const referralLink = `https://copperaa.com/?aff=${user?.affiliateCode}`;
-    navigator.clipboard.writeText(referralLink);
-    setCopyState('Copied!');
-    setTimeout(() => setCopyState('Copy Link'), 2000);
-};
 
-if (loading) return <div className="p-4">Loading dashboard...</div>;
-
-const referralLink = `https://copperaa.com/?aff=${user?.affiliateCode}`;
-
-// Helper for max value in chart to scale height
-const maxChartVal = Math.max(...dailyData.map(d => d.amount), 10);
-
-return (
-    <div>
-        {/* Top Stat Cards */}
-        <div className="stat-grid">
-            <div className="card">
-                <div className="stat-label">Total Earnings</div>
-                <div className="stat-val" style={{ color: '#B87333' }}>${stats.totalEarnings}</div>
+    return (
+        <div>
+            {/* 1. KPI Stats Grid (4 Columns) */}
+            <div className="stat-grid">
+                <div className="card">
+                    <div className="stat-label">
+                        <span>Total Earnings</span>
+                        <span style={{ color: '#B87333', background: 'rgba(184, 115, 51, 0.1)', padding: '6px', borderRadius: '8px' }}><Icons.Chart /></span>
+                    </div>
+                    <div className="stat-val" style={{ color: '#B87333' }}>${stats.totalEarnings}</div>
+                </div>
+                <div className="card">
+                    <div className="stat-label">
+                        <span>Paid Out</span>
+                        <span style={{ color: '#10B981', background: 'rgba(16, 185, 129, 0.1)', padding: '6px', borderRadius: '8px' }}><Icons.Wallet /></span>
+                    </div>
+                    <div className="stat-val" style={{ color: '#10B981' }}>${stats.paidEarnings}</div>
+                </div>
+                <div className="card">
+                    <div className="stat-label">
+                        <span>Pending</span>
+                        <span style={{ color: '#F59E0B', background: 'rgba(245, 158, 11, 0.1)', padding: '6px', borderRadius: '8px' }}><Icons.Clock /></span>
+                    </div>
+                    <div className="stat-val" style={{ color: '#F59E0B' }}>${stats.unpaidEarnings}</div>
+                </div>
+                <div className="card">
+                    <div className="stat-label">
+                        <span>Total Clicks</span>
+                        <span style={{ color: '#6366F1', background: 'rgba(99, 102, 241, 0.1)', padding: '6px', borderRadius: '8px' }}><Icons.Mouse /></span>
+                    </div>
+                    <div className="stat-val">${stats.totalClicks}</div>
+                </div>
             </div>
-            <div className="card">
-                <div className="stat-label">Paid Out</div>
-                <div className="stat-val" style={{ color: '#10B981' }}>${stats.paidEarnings}</div>
-            </div>
-            <div className="card">
-                <div className="stat-label">Pending Payout</div>
-                <div className="stat-val" style={{ color: '#F59E0B' }}>${stats.unpaidEarnings}</div>
-            </div>
-            <div className="card">
-                <div className="stat-label">Total Clicks</div>
-                <div className="stat-val">${stats.totalClicks}</div>
-            </div>
-        </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '2rem', marginBottom: '2rem' }}>
-
-            {/* Visual Chart (Manual CSS Bar Chart) */}
-            <div className="card">
-                <h3 style={{ marginTop: 0, marginBottom: '1.5rem', fontWeight: 600 }}>Earnings - Last 7 Days</h3>
-                <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', height: '200px' }}>
-                    {dailyData.map((d, i) => (
-                        <div key={i} style={{ textAlign: 'center', flex: 1 }}>
-                            <div style={{
-                                height: `${(d.amount / maxChartVal) * 150}px`,
-                                background: d.amount > 0 ? '#B87333' : '#E5E7EB',
-                                width: '30%',
-                                margin: '0 auto',
-                                borderRadius: '4px 4px 0 0',
-                                minHeight: '4px',
-                                transition: 'height 0.5s ease'
-                            }}></div>
-                            <div style={{ marginTop: '10px', fontSize: '0.75rem', color: '#6B7280' }}>{d.date}</div>
-                            <div style={{ fontSize: '0.8rem', fontWeight: 500 }}>${d.amount}</div>
+            {/* 2. Referral & Quick Actions */}
+            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '2rem', marginBottom: '3rem' }}>
+                {/* Referral Card */}
+                <div className="card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', borderColor: '#B87333', borderWidth: '1px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
+                        <div>
+                            <h3 style={{ margin: 0, fontWeight: 700, fontSize: '1.25rem' }}>Your Referral Link</h3>
+                            <p style={{ color: '#B87333', fontSize: '0.95rem', marginTop: '0.25rem', fontWeight: 500 }}>
+                                Earn 10% commission on every sale made through this link.
+                            </p>
                         </div>
-                    ))}
+                        <div className="badge info" style={{ fontSize: '0.85rem' }}>Active Campaign</div>
+                    </div>
+
+                    <div style={{ display: 'flex', gap: '1rem' }}>
+                        <div style={{ flex: 1, background: '#F3F4F6', padding: '0.85rem 1rem', borderRadius: '10px', border: '1px solid #E5E7EB', fontFamily: 'monospace', fontWeight: 600, color: '#374151', display: 'flex', alignItems: 'center' }}>
+                            {referralLink}
+                        </div>
+                        <button onClick={copyLink} className="btn btn-primary" style={{ minWidth: '140px' }}>
+                            <Icons.Copy /> {copyState}
+                        </button>
+                    </div>
+                </div>
+
+                {/* Quick Actions */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                    <a href="https://www.copperaa.com/collections/all" target="_blank" rel="noreferrer" className="btn btn-secondary" style={{ padding: '1rem', justifyContent: 'flex-start' }}>
+                        <Icons.External /> <span style={{ marginLeft: '0.5rem' }}>View Store</span>
+                    </a>
+                    <button onClick={() => navigate('/affiliate/settings')} className="btn btn-secondary" style={{ padding: '1rem', justifyContent: 'flex-start' }}>
+                        <Icons.Gear /> <span style={{ marginLeft: '0.5rem' }}>Payout Settings</span>
+                    </button>
+                    <button onClick={() => setSupportModalOpen(true)} className="btn btn-secondary" style={{ padding: '1rem', justifyContent: 'flex-start' }}>
+                        <Icons.Support /> <span style={{ marginLeft: '0.5rem' }}>Contact Support</span>
+                    </button>
                 </div>
             </div>
 
-            {/* Referral Link Card */}
-            <div className="card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                <h3 style={{ marginTop: 0, fontWeight: 600 }}>Promote & Earn</h3>
-                <p style={{ color: '#6B7280', fontSize: '0.9rem', marginBottom: '1.5rem' }}>Share your link to earn 10% on every sale.</p>
-
-                <div style={{ background: '#F3F4F6', padding: '1rem', borderRadius: '8px', border: '1px solid #E5E7EB', marginBottom: '1rem', wordBreak: 'break-all', fontFamily: 'monospace', fontWeight: 500 }}>
-                    {referralLink}
-                </div>
-
-                <button onClick={copyLink} className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', width: '100%' }}>
-                    <Icons.Copy /> {copyState}
-                </button>
-            </div>
-        </div>
-
-        {/* Commissions Table */}
-        <div className="table-container">
-            <h3 style={{ padding: '1.5rem 1.5rem 0', marginTop: 0, fontWeight: 600 }}>Recent Commissions</h3>
-            <table className="data-table">
-                <thead>
-                    <tr>
-                        <th>Order ID</th>
-                        <th>Subtotal</th>
-                        <th>Commission</th>
-                        <th>Status</th>
-                        <th>Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {commissions.length === 0 ? (
+            {/* 3. Recent Commissions Table */}
+            <h3 style={{ margin: '0 0 1.5rem 0', fontWeight: 600, color: '#1F2937', fontSize: '1.25rem' }}>Recent Commissions</h3>
+            <div className="table-container">
+                <table className="data-table">
+                    <thead>
                         <tr>
-                            <td colSpan="5" style={{ textAlign: 'center', padding: '3rem', color: '#9CA3AF' }}>No commissions yet.</td>
+                            <th>Order ID</th>
+                            <th>Subtotal</th>
+                            <th>Commission</th>
+                            <th>Status</th>
+                            <th>Date</th>
                         </tr>
-                    ) : (
-                        commissions.map(comm => (
-                            <tr key={comm._id}>
-                                <td style={{ fontWeight: 500, fontFamily: 'monospace' }}>{comm.orderId}</td>
-                                <td>${comm.orderSubtotal}</td>
-                                <td style={{ fontWeight: 600, color: '#111827' }}>${comm.commissionAmount}</td>
-                                <td>
-                                    <span className={`badge ${comm.status === 'paid' ? 'success' :
-                                        comm.status === 'approved' ? 'info' :
-                                            comm.status === 'cancelled' ? 'error' : 'warning'
-                                        }`}>
-                                        {comm.status}
-                                    </span>
+                    </thead>
+                    <tbody>
+                        {commissions.length === 0 ? (
+                            <tr>
+                                <td colSpan="5" style={{ textAlign: 'center', padding: '4rem', color: '#9CA3AF' }}>
+                                    <div style={{ marginBottom: '1rem', fontSize: '3rem', opacity: 0.2 }}>💸</div>
+                                    <div style={{ fontWeight: 500, fontSize: '1.1rem' }}>No commissions yet</div>
+                                    <div style={{ fontSize: '0.9rem' }}>Share your link to start earning!</div>
                                 </td>
-                                <td style={{ color: '#6B7280' }}>{new Date(comm.createdAt).toLocaleDateString()}</td>
                             </tr>
-                        ))
-                    )}
-                </tbody>
-            </table>
+                        ) : (
+                            commissions.map(comm => (
+                                <tr key={comm._id}>
+                                    <td style={{ fontWeight: 600, fontFamily: 'monospace' }}>#{comm.orderId}</td>
+                                    <td>${comm.orderSubtotal}</td>
+                                    <td style={{ fontWeight: 700, color: '#B87333' }}>${comm.commissionAmount}</td>
+                                    <td>
+                                        <span className={`badge ${comm.status === 'paid' ? 'success' :
+                                                comm.status === 'approved' ? 'info' :
+                                                    comm.status === 'cancelled' ? 'error' : 'warning'
+                                            }`}>
+                                            {comm.status}
+                                        </span>
+                                    </td>
+                                    <td style={{ color: '#6B7280' }}>{new Date(comm.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}</td>
+                                </tr>
+                            ))
+                        )}
+                    </tbody>
+                </table>
+            </div>
+
+            {/* Support Modal */}
+            {supportModalOpen && (
+                <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100, backdropFilter: 'blur(4px)' }} onClick={() => setSupportModalOpen(false)}>
+                    <div className="card" style={{ width: '400px', maxWidth: '90%', animation: 'fadeIn 0.2s ease-out' }} onClick={e => e.stopPropagation()}>
+                        <h3 style={{ marginTop: 0 }}>Contact Support</h3>
+                        <p style={{ color: '#6B7280', marginBottom: '2rem' }}>Need help? Reach out to our partner support team.</p>
+
+                        <a href="mailto:contact@copperaa.com" className="btn btn-secondary" style={{ display: 'flex', width: '100%', marginBottom: '1rem', justifyContent: 'center' }}>
+                            📧 Email Support
+                        </a>
+                        <a href="https://wa.me/919214836314" target="_blank" rel="noreferrer" className="btn btn-primary" style={{ display: 'flex', width: '100%', justifyContent: 'center', background: '#25D366', border: 'none', boxShadow: 'none' }}>
+                            📱 Chat on WhatsApp
+                        </a>
+
+                        <button onClick={() => setSupportModalOpen(false)} style={{ marginTop: '1.5rem', width: '100%', padding: '0.5rem', background: 'transparent', border: 'none', color: '#6B7280', cursor: 'pointer', fontSize: '0.9rem' }}>
+                            Close
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
-    </div>
-);
+    );
 };
 
 export default AffiliateDashboard;
