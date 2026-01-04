@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import authService from '../services/auth.service';
 import AdminStyles from './AdminStyles';
+import Logo from '../assets/logo.png'; // Import Logo
 
 // Simple Icons
 const Icons = {
@@ -32,7 +33,9 @@ const AdminLayout = () => {
 
             {/* Sidebar */}
             <aside className="admin-sidebar">
-                <div className="sb-brand">Copperaa</div>
+                <div className="sb-brand-container">
+                    <img src={Logo} alt="Copperaa" className="sb-logo" />
+                </div>
                 <nav className="sb-nav">
                     <li className="sb-item">
                         <NavLink to="/admin/dashboard" className={({ isActive }) => `sb-link ${isActive ? 'active' : ''}`}>
