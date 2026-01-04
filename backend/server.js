@@ -54,7 +54,8 @@ app.use('/api/auth', authLimiter, require('./routes/auth.routes'));
 app.use('/api/admin', adminLimiter, require('./routes/admin.routes'));
 app.use('/api/referrals', trackingLimiter, require('./routes/referral.routes'));
 app.use('/api/affiliate', authLimiter, require('./routes/affiliate.dashboard.routes')); // Reuse auth limiter or general? Using auth limiter for safety
-app.use('/api/webhooks', require('./routes/webhook.routes')); // Webhooks do not use rate limit middleware usually as Shopify sends them, but hmac validation is there
+app.use('/api/webhooks', require('./routes/webhook.routes'));
+app.use('/api/track', require('./routes/tracking.routes'));
 
 // Error Handler (Last middleware)
 app.use(errorHandler);

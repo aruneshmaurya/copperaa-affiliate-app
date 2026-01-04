@@ -26,9 +26,20 @@
       return null;
     }
 
-    // 3. Logic: URL -> Cookie
+    // 3. Logic: URL -> Cookie & Backend Tracking
     if (affiliateId) {
       setCookie('affiliate_id', affiliateId, 30); // 30 days
+      
+      // FIRE AND FORGET - Track Click
+      fetch('https://copperaa-affiliate-app.onrender.com/api/track/click', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          affiliateCode: affiliateId,
+          userAgent: navigator.userAgent
+          // IP is handled by backend
+        })
+      }).catch(err => console.error('Tracking error', err));
     }
 
     // 4. Logic: Cookie -> Cart Attribute (Sync)
