@@ -52,6 +52,11 @@ app.use(express.json({
 }));
 
 // Health Check Route (No Limit)
+// Health Check Route (No Limit)
+app.get('/', (req, res) => {
+    res.status(200).send('Copperaa Affiliate App Running');
+});
+
 app.get('/health', (req, res) => {
     res.status(200).json({ status: 'ok', message: 'Copperaa Affiliate Backend is running' });
 });

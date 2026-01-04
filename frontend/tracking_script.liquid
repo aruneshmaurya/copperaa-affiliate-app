@@ -1,0 +1,64 @@
+<script>
+  (function() {
+    // 1. Read ?aff= from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const affiliateId = urlParams.get('aff');
+
+    // 2. Cookie Management Helpers
+    function setCookie(name, value, days) {
+      let expires = "";
+      if (days) {
+        const date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
+      }
+      document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    }
+
+    function getCookie(name) {
+      const nameEQ = name + "=";
+      const ca = document.cookie.split(';');
+      for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+      }
+      return null;
+    }
+
+    // 3. Logic: URL -> Cookie
+    if (affiliateId) {
+      setCookie('affiliate_id', affiliateId, 30); // 30 days
+    }
+
+    // 4. Logic: Cookie -> Cart Attribute (Sync)
+    const storedAffiliateId = getCookie('affiliate_id');
+
+    if (storedAffiliateId) {
+      // Check if we need to sync to cart (Idempotency)
+      // fetch cart.js to see attributes (lightweight)
+      fetch('/cart.js')
+        .then(res => res.json())
+        .then(cart => {
+          // If attribute needs updating
+          if (cart.attributes.affiliate_id !== storedAffiliateId) {
+            // Update Cart Attributes via AJAX API
+            fetch('/cart/update.js', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                attributes: {
+                  'affiliate_id': storedAffiliateId
+                }
+              })
+            }).then(() => {
+              console.log('Affiliate ID synced to cart:', storedAffiliateId);
+            }).catch(err => console.error('Affiliate sync failed', err));
+          }
+        })
+        .catch(err => console.error('Error fetching cart', err));
+    }
+  })();
+</script>

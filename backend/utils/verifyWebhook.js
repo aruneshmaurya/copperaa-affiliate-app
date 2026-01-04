@@ -15,7 +15,14 @@ const verifyWebhook = (req) => {
             .update(body, 'utf8')
             .digest('base64');
 
-        return digest === hmac;
+        const digestBuffer = Buffer.from(digest);
+        const hmacBuffer = Buffer.from(hmac);
+
+        if (digestBuffer.length !== hmacBuffer.length) {
+            return false;
+        }
+
+        return crypto.timingSafeEqual(digestBuffer, hmacBuffer);
     } catch (error) {
         console.error('Webhook verification failed', error);
         return false;
