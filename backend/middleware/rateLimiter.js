@@ -12,7 +12,7 @@ const generalLimiter = rateLimit({
 // Auth Limiter (Strict: 5 req/min)
 const authLimiter = rateLimit({
     windowMs: 1 * 60 * 1000,
-    max: 5,
+    max: 50, // Relaxed for testing (was 5)
     message: 'Too many login attempts, please try again in a minute',
     standardHeaders: true,
     legacyHeaders: false,
