@@ -20,10 +20,14 @@ const Commissions = () => {
         fetchCommissions();
     }, []);
 
-    const handlePay = async (id) => {
-        if (window.confirm('Mark this commission as PAID? This does not send money, only updates record.')) {
+    const handleAction = async (id, action) => {
+        const confirmMsg = action === 'approve'
+            ? 'Approve this commission? Affiliate will see it as earnings.'
+            : 'Mark as PAID? Ensure you have sent the money manually.';
+
+        if (window.confirm(confirmMsg)) {
             try {
-                await api.patch(`/admin/commissions/${id}/pay`);
+                await api.patch(`/admin/commissions/${id}/${action}`);
                 fetchCommissions();
             } catch (err) {
                 alert('Update failed');
@@ -61,8 +65,21 @@ const Commissions = () => {
                                 {comm.status.toUpperCase()}
                             </td>
                             <td>
-                                {comm.status === 'unpaid' && (
-                                    <button onClick={() => handlePay(comm._id)}>Mark Paid</button>
+                                {comm.status === 'pending' && (
+                                    <button
+                                        onClick={() => handleAction(comm._id, 'approve')}
+                                        style={{ marginRight: '5px', background: '#3B82F6', color: 'white', padding: '5px 10px', borderRadius: '4px', border: 'none', cursor: 'pointer' }}
+                                    >
+                                        Approve
+                                    </button>
+                                )}
+                                {comm.status === 'approved' && (
+                                    <button
+                                        onClick={() => handleAction(comm._id, 'pay')}
+                                        style={{ background: '#10B981', color: 'white', padding: '5px 10px', borderRadius: '4px', border: 'none', cursor: 'pointer' }}
+                                    >
+                                        Mark Paid
+                                    </button>
                                 )}
                             </td>
                         </tr>

@@ -10,6 +10,7 @@ const { protect, admin } = require('../middleware/auth.middleware');
 
 const {
     getCommissions,
+    approveCommission,
     markCommissionPaid
 } = require('../controllers/admin.commissions.controller');
 
@@ -26,6 +27,7 @@ router.patch('/affiliates/:id/commission', validateObjectId, updateCommission);
 
 // Commission Routes
 router.get('/commissions', getCommissions);
+router.patch('/commissions/:id/approve', validateObjectId, approveCommission);
 router.patch('/commissions/:id/pay', validateObjectId, markCommissionPaid);
 
 module.exports = router;

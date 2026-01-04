@@ -17,6 +17,27 @@ const getCommissions = async (req, res) => {
     }
 };
 
+// @desc    Approve commission (ready for payout)
+// @route   PATCH /api/admin/commissions/:id/approve
+// @access  Private/Admin
+const approveCommission = async (req, res) => {
+    try {
+        const commission = await Commission.findById(req.params.id);
+
+        if (!commission) {
+            res.status(404);
+            throw new Error('Commission not found');
+        }
+
+        commission.status = 'approved';
+        const updatedCommission = await commission.save();
+
+        res.status(200).json(updatedCommission);
+    } catch (error) {
+        res.status(res.statusCode === 200 ? 500 : res.statusCode).json({ message: error.message });
+    }
+};
+
 // @desc    Mark commission as paid
 // @route   PATCH /api/admin/commissions/:id/pay
 // @access  Private/Admin
@@ -29,7 +50,7 @@ const markCommissionPaid = async (req, res) => {
             throw new Error('Commission not found');
         }
 
-        commission.status = 'paid';
+        commission.status = 'paid'; // Or 'approved' -> 'paid' flow
         const updatedCommission = await commission.save();
 
         res.status(200).json(updatedCommission);
@@ -40,5 +61,6 @@ const markCommissionPaid = async (req, res) => {
 
 module.exports = {
     getCommissions,
+    approveCommission,
     markCommissionPaid
 };
