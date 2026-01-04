@@ -13,6 +13,9 @@ connectDB();
 
 const app = express();
 
+// Trust Proxy (Required for Render/Heroku with rate limiters)
+app.set('trust proxy', 1);
+
 // Middleware Imports
 const {
     authLimiter,
