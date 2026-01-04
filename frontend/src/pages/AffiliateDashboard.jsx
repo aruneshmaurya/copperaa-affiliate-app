@@ -2,15 +2,28 @@ import React, { useEffect, useState } from 'react';
 import api from '../services/api';
 import authService from '../services/auth.service';
 import { useNavigate } from 'react-router-dom';
+import DashboardStyles from '../components/DashboardStyles';
+
+// Simple Icons (using SVG directly to avoid dependencies)
+const Icons = {
+    Wallet: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4" /><path d="M3 5v14a2 2 0 0 0 2 2h16v-5" /><path d="M18 12a2 2 0 0 0 0 4h4v-4Z" /></svg>,
+    CheckCircle: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg>,
+    Clock: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>,
+    MousePointer: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z" /><path d="M13 13l6 6" /></svg>,
+    Copy: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></svg>,
+    Logout: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" /></svg>
+};
 
 const AffiliateDashboard = () => {
     const [stats, setStats] = useState(null);
     const [commissions, setCommissions] = useState([]);
     const [loading, setLoading] = useState(true);
+
     // Payment Settings State
     const [paymentMethod, setPaymentMethod] = useState('paypal');
     const [paymentEmail, setPaymentEmail] = useState('');
     const [paymentMsg, setPaymentMsg] = useState('');
+    const [copyState, setCopyState] = useState('Copy Link');
 
     const user = authService.getCurrentUser();
     const navigate = useNavigate();
@@ -21,7 +34,7 @@ const AffiliateDashboard = () => {
                 const statsRes = await api.get('/affiliate/stats');
                 const commRes = await api.get('/affiliate/commissions');
                 // Fetch fresh user profile for payment settings
-                const meRes = await api.get('/auth/me'); // Ensure this route exists and returns profile
+                const meRes = await api.get('/auth/me');
 
                 setStats(statsRes.data);
                 setCommissions(commRes.data);
@@ -55,179 +68,175 @@ const AffiliateDashboard = () => {
         }
     };
 
-    if (loading) return <div style={{ padding: '20px' }}>Loading Dashboard...</div>;
+    const copyLink = () => {
+        const referralLink = `https://copperaa.com/?aff=${user?.affiliateCode}`;
+        navigator.clipboard.writeText(referralLink);
+        setCopyState('Copied!');
+        setTimeout(() => setCopyState('Copy Link'), 2000);
+    };
+
+    if (loading) return (
+        <>
+            <DashboardStyles />
+            <div className="loading-screen">Loading Dashboard...</div>
+        </>
+    );
 
     const referralLink = `https://copperaa.com/?aff=${user?.affiliateCode}`;
 
-    const copyLink = () => {
-        navigator.clipboard.writeText(referralLink);
-        alert('Link copied to clipboard!');
-    };
-
     return (
-        <div style={{ fontFamily: 'sans-serif', background: '#f9f9f9', minHeight: '100vh', paddingBottom: '30px' }}>
-            {/* Header */}
-            <div style={{ background: '#fff', padding: '15px 20px', borderBottom: '1px solid #eee', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <h2 style={{ margin: 0, color: '#333' }}>Copperaa Affiliate</h2>
-                <div>
-                    <span style={{ marginRight: '15px' }}>Hello, {user.name}</span>
-                    <button onClick={handleLogout} style={{ background: 'transparent', border: '1px solid #ccc', padding: '5px 10px', cursor: 'pointer' }}>Logout</button>
-                </div>
-            </div>
-
-            <div style={{ maxWidth: '1000px', margin: '30px auto', padding: '0 20px' }}>
-
-                {/* Stats Cards */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '30px' }}>
-                    <div style={cardStyle}>
-                        <h4 style={cardInternalTitle}>Total Earnings</h4>
-                        <p style={cardValue}>USD {stats.totalEarnings}</p>
-                    </div>
-                    <div style={cardStyle}>
-                        <h4 style={cardInternalTitle}>Paid Earnings</h4>
-                        <p style={cardValue}>USD {stats.paidEarnings}</p>
-                    </div>
-                    <div style={cardStyle}>
-                        <h4 style={cardInternalTitle}>Unpaid Earnings</h4>
-                        <p style={{ ...cardValue, color: '#B87333' }}>USD {stats.unpaidEarnings}</p>
-                    </div>
-                    <div style={cardStyle}>
-                        <h4 style={cardInternalTitle}>Clicks</h4>
-                        <p style={cardValue}>{stats.totalClicks}</p>
-                    </div>
-                </div>
-
-                {/* Referral Link Section */}
-                <div style={{ background: '#fff', padding: '25px', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0,0,0,0.05)', marginBottom: '30px', textAlign: 'center' }}>
-                    <h3 style={{ marginTop: 0 }}>Your Referral Link</h3>
-                    <p style={{ color: '#666' }}>Share this link to earn 10% commission on every sale.</p>
-                    <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginTop: '15px', flexWrap: 'wrap' }}>
-                        <input
-                            readOnly
-                            value={referralLink}
-                            style={{ padding: '10px', width: '300px', border: '1px solid #ddd', borderRadius: '4px', background: '#fafafa' }}
-                        />
-                        <button onClick={copyLink} style={{ padding: '10px 20px', background: '#333', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>Copy Link</button>
-                    </div>
-                </div>
-
-                {/* Payment Settings Section */}
-                <div style={{ background: '#fff', padding: '25px', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0,0,0,0.05)', marginBottom: '30px' }}>
-                    <h3 style={{ marginTop: 0, marginBottom: '20px', borderBottom: '1px solid #eee', paddingBottom: '10px' }}>Payout Settings</h3>
-                    {paymentMsg && <p style={{ color: paymentMsg.includes('Error') ? 'red' : 'green', marginBottom: '15px' }}>{paymentMsg}</p>}
-                    <form onSubmit={handlePaymentSave} style={{ display: 'flex', flexDirection: 'column', gap: '15px', maxWidth: '400px' }}>
-                        <div>
-                            <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold', color: '#555' }}>Payment Method</label>
-                            <select
-                                value={paymentMethod}
-                                onChange={(e) => setPaymentMethod(e.target.value)}
-                                style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ddd' }}
-                            >
-                                <option value="paypal">PayPal</option>
-                                <option value="bank_transfer">Bank Transfer</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold', color: '#555' }}>
-                                {paymentMethod === 'paypal' ? 'PayPal Email' : 'Bank Account Details'}
-                            </label>
-                            {paymentMethod === 'paypal' ? (
-                                <input
-                                    type="email"
-                                    value={paymentEmail}
-                                    onChange={(e) => setPaymentEmail(e.target.value)}
-                                    placeholder="Enter your PayPal email"
-                                    required
-                                    style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ddd' }}
-                                />
-                            ) : (
-                                <textarea
-                                    value={paymentEmail}
-                                    onChange={(e) => setPaymentEmail(e.target.value)}
-                                    placeholder="Bank Name, Account Number, Routing/Sort Code, SWIFT/IBAN"
-                                    required
-                                    style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ddd', minHeight: '80px', fontFamily: 'sans-serif' }}
-                                />
-                            )}
-                        </div>
-                        <button type="submit" style={{ padding: '10px 20px', background: '#28a745', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', alignSelf: 'flex-start' }}>
-                            Save Payout Settings
+        <>
+            <DashboardStyles />
+            <div className="app-wrapper">
+                {/* Navbar */}
+                <nav className="navbar">
+                    <div className="navbar-brand">Copperaa Affiliate</div>
+                    <div className="navbar-user">
+                        <span className="user-greeting">Hi, {user.name}</span>
+                        <button onClick={handleLogout} className="btn-logout" title="Logout">
+                            <Icons.Logout /> Logout
                         </button>
-                    </form>
-                </div>
+                    </div>
+                </nav>
 
-                {/* Commissions Table */}
-                <h3 style={{ color: '#333' }}>Recent Commissions</h3>
-                <div style={{ overflowX: 'auto', background: '#fff', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
-                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                        <thead>
-                            <tr style={{ background: '#f4f4f4', textAlign: 'left' }}>
-                                <th style={thStyle}>Order ID</th>
-                                <th style={thStyle}>Subtotal</th>
-                                <th style={thStyle}>Commission</th>
-                                <th style={thStyle}>Status</th>
-                                <th style={thStyle}>Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {commissions.length === 0 ? (
-                                <tr><td colSpan="5" style={{ padding: '20px', textAlign: 'center' }}>No commissions yet.</td></tr>
-                            ) : (
-                                commissions.map(comm => (
-                                    <tr key={comm._id} style={{ borderBottom: '1px solid #eee' }}>
-                                        <td style={tdStyle}>{comm.orderId}</td>
-                                        <td style={tdStyle}>USD {comm.orderSubtotal}</td>
-                                        <td style={tdStyle}>USD {comm.commissionAmount}</td>
-                                        <td style={{ ...tdStyle, color: comm.status === 'paid' ? 'green' : (comm.status === 'cancelled' || comm.status === 'reversed' ? 'red' : 'orange') }}>
-                                            {comm.status.toUpperCase()}
+                <div className="dashboard-container">
+
+                    {/* Stats Grid */}
+                    <div className="stats-grid">
+                        <div className="stat-card">
+                            <div className="stat-label">Total Earnings</div>
+                            <div className="stat-value copper-text">USD {stats.totalEarnings}</div>
+                        </div>
+                        <div className="stat-card">
+                            <div className="stat-label">Paid Out</div>
+                            <div className="stat-value">USD {stats.paidEarnings}</div>
+                        </div>
+                        <div className="stat-card">
+                            <div className="stat-label">Pending</div>
+                            <div className="stat-value" style={{ color: '#F59E0B' }}>USD {stats.unpaidEarnings}</div>
+                        </div>
+                        <div className="stat-card">
+                            <div className="stat-label">Total Clicks</div>
+                            <div className="stat-value">{stats.totalClicks}</div>
+                        </div>
+                    </div>
+
+                    {/* Main Content Grid */}
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+
+                        {/* Referral Link Card */}
+                        <div className="card">
+                            <div className="card-header">
+                                <h3 className="card-title">Promote & Earn</h3>
+                                <p className="card-subtitle">Share this link to earn 10% commission on every sale.</p>
+                            </div>
+                            <div className="input-group">
+                                <input
+                                    className="form-control form-control-readonly"
+                                    readOnly
+                                    value={referralLink}
+                                />
+                                <button onClick={copyLink} className="btn btn-primary btn-copy">
+                                    <Icons.Copy /> {copyState}
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Payout Settings Card */}
+                        <div className="card">
+                            <div className="card-header">
+                                <h3 className="card-title">Payout Settings</h3>
+                                <p className="card-subtitle">Configure where you want to receive your payments.</p>
+                            </div>
+
+                            {paymentMsg && <div style={{ color: paymentMsg.includes('Error') ? 'red' : 'green', marginBottom: '1rem', fontWeight: 500 }}>{paymentMsg}</div>}
+
+                            <form onSubmit={handlePaymentSave}>
+                                <div className="form-group">
+                                    <label className="form-label">Payment Method</label>
+                                    <select
+                                        className="form-control"
+                                        value={paymentMethod}
+                                        onChange={(e) => setPaymentMethod(e.target.value)}
+                                    >
+                                        <option value="paypal">PayPal</option>
+                                        <option value="bank_transfer">Bank Transfer</option>
+                                    </select>
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label">
+                                        {paymentMethod === 'paypal' ? 'PayPal Email Address' : 'Bank Account Details'}
+                                    </label>
+                                    {paymentMethod === 'paypal' ? (
+                                        <input
+                                            type="email"
+                                            className="form-control"
+                                            value={paymentEmail}
+                                            onChange={(e) => setPaymentEmail(e.target.value)}
+                                            placeholder="Enter your PayPal email"
+                                            required
+                                        />
+                                    ) : (
+                                        <textarea
+                                            className="form-control"
+                                            value={paymentEmail}
+                                            onChange={(e) => setPaymentEmail(e.target.value)}
+                                            placeholder="Bank Name, Account Number, SWIFT/IBAN, Beneficiary Name"
+                                            required
+                                            rows="3"
+                                        />
+                                    )}
+                                </div>
+                                <button type="submit" className="btn btn-primary">
+                                    Save Settings
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    {/* Commissions Table */}
+                    <h3 style={{ margin: '2rem 0 1rem 0', fontWeight: 600, color: '#1F2937' }}>Recent Commissions</h3>
+                    <div className="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Subtotal</th>
+                                    <th>Commission</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {commissions.length === 0 ? (
+                                    <tr>
+                                        <td colSpan="5" style={{ textAlign: 'center', padding: '3rem', color: '#6B7280' }}>
+                                            No commissions found yet. Start promoting!
                                         </td>
-                                        <td style={tdStyle}>{new Date(comm.createdAt).toLocaleDateString()}</td>
                                     </tr>
-                                ))
-                            )}
-                        </tbody>
-                    </table>
+                                ) : (
+                                    commissions.map(comm => (
+                                        <tr key={comm._id}>
+                                            <td style={{ fontWeight: 500 }}>{comm.orderId}</td>
+                                            <td>USD {comm.orderSubtotal}</td>
+                                            <td style={{ fontWeight: 600, color: '#1F2937' }}>USD {comm.commissionAmount}</td>
+                                            <td>
+                                                <span className={`badge badge-${comm.status === 'approved' ? 'approved' : comm.status}`}>
+                                                    {comm.status}
+                                                </span>
+                                            </td>
+                                            <td>{new Date(comm.createdAt).toLocaleDateString()}</td>
+                                        </tr>
+                                    ))
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+
                 </div>
-
             </div>
-        </div>
+        </>
     );
-};
-
-// Styles
-const cardStyle = {
-    background: '#fff',
-    padding: '20px',
-    borderRadius: '8px',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
-    textAlign: 'center'
-};
-
-const cardInternalTitle = {
-    margin: '0 0 10px 0',
-    color: '#888',
-    fontSize: '14px',
-    textTransform: 'uppercase'
-};
-
-const cardValue = {
-    margin: 0,
-    fontSize: '24px',
-    fontWeight: 'bold',
-    color: '#333'
-};
-
-const thStyle = {
-    padding: '15px',
-    fontSize: '14px',
-    fontWeight: '600',
-    color: '#555'
-};
-
-const tdStyle = {
-    padding: '15px',
-    fontSize: '14px',
-    color: '#333'
 };
 
 export default AffiliateDashboard;
