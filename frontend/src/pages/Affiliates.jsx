@@ -83,10 +83,10 @@ const Affiliates = () => {
                         {affiliates.map((aff) => (
                             <tr key={aff._id}>
                                 <td>
-                                    <div style={{ fontWeight: 600 }}>{aff.name}</div>
-                                    <div style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>Code: {aff.affiliateCode}</div>
+                                    <div style={{ fontWeight: 600, color: '#111827' }}>{aff.name}</div>
+                                    <div style={{ fontSize: '0.75rem', color: '#6B7280' }}>Code: {aff.affiliateCode}</div>
                                 </td>
-                                <td>{aff.email}</td>
+                                <td style={{ color: '#374151' }}>{aff.email}</td>
                                 <td>
                                     <span className={`badge ${aff.approved ? 'success' : 'warning'}`}>
                                         {aff.approved ? 'Active' : 'Pending'}

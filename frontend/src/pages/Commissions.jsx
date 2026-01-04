@@ -104,13 +104,13 @@ const Commissions = () => {
                                     <td style={{ color: '#6B7280', fontSize: '0.85rem' }}>
                                         {new Date(comm.createdAt).toLocaleDateString()}
                                     </td>
-                                    <td style={{ fontFamily: 'monospace' }}>{comm.orderId}</td>
+                                    <td style={{ fontWeight: 'bold', fontFamily: 'monospace', color: '#111827' }}>{comm.orderId}</td>
                                     <td>
-                                        <div style={{ fontWeight: 500 }}>
+                                        <div style={{ fontWeight: 500, color: '#111827' }}>
                                             {comm.affiliate ? comm.affiliate.name : 'Unknown User'}
                                         </div>
                                         {comm.affiliate && (
-                                            <div style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>
+                                            <div style={{ fontSize: '0.75rem', color: '#6B7280' }}>
                                                 {comm.affiliate.email}
                                             </div>
                                         )}
@@ -119,7 +119,7 @@ const Commissions = () => {
                                         <div style={{ fontWeight: 600, color: '#111827' }}>
                                             ${comm.commissionAmount}
                                         </div>
-                                        <div style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>
+                                        <div style={{ fontSize: '0.75rem', color: '#6B7280' }}>
                                             Order: ${comm.orderSubtotal}
                                         </div>
                                     </td>

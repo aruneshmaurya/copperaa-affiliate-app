@@ -235,7 +235,7 @@ const AdminStyles = () => (
             padding: 1.5rem;
             border-bottom: 1px solid #F3F4F6;
             font-size: 0.95rem;
-            color: var(--text-main);
+            color: #1F2937;
             vertical-align: middle;
             transition: background 0.2s;
         }
