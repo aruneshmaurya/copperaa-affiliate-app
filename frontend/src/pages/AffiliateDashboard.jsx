@@ -42,7 +42,7 @@ const AffiliateDashboard = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                conststatsRes = await api.get('/affiliate/stats');
+                const statsRes = await api.get('/affiliate/stats');
                 const commRes = await api.get('/affiliate/commissions');
                 const meRes = await api.get('/auth/me');
 
