@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import authService from '../services/auth.service';
+import DashboardStyles from '../components/DashboardStyles';
+import logo from '../assets/logo.png';
 
 const Register = () => {
     const [formData, setFormData] = useState({ name: '', email: '', password: '' });
@@ -17,34 +19,70 @@ const Register = () => {
             console.log('Registration Success');
             setMsg('Registration successful! You can now log in.');
             setError('');
+            setTimeout(() => navigate('/login-affiliate'), 2000);
         } catch (err) {
             console.error('Registration Error:', err);
-            // DEBUGGING: Show full details
             const detailedError = err.response?.data?.message || err.message || JSON.stringify(err);
-            setError(`Debug Error: ${detailedError}`);
+            setError(detailedError);
             setMsg('');
         }
     };
 
     return (
-        <div style={{ maxWidth: '400px', margin: '50px auto', padding: '20px', border: '1px solid #ddd' }}>
-            <h2>Affiliate Register</h2>
-            {msg && <p style={{ color: 'green' }}>{msg}</p>}
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            <form onSubmit={onSubmit}>
-                <div style={{ marginBottom: '10px' }}>
-                    <input type="text" name="name" placeholder="Full Name" onChange={onChange} required style={{ width: '100%', padding: '8px' }} />
+        <>
+            <DashboardStyles />
+            <div className="auth-container">
+                <div className="auth-card">
+                    <img src={logo} alt="Copperaa" className="auth-logo" />
+
+                    <h2 className="auth-title">Join the Program</h2>
+                    <p className="auth-subtitle">Become a partner and earn today</p>
+
+                    {msg && <div style={{ background: '#D1FAE5', color: '#065F46', padding: '10px', borderRadius: '8px', marginBottom: '20px', fontSize: '0.9rem' }}>{msg}</div>}
+                    {error && <div style={{ background: '#FECACA', color: '#991B1B', padding: '10px', borderRadius: '8px', marginBottom: '20px', fontSize: '0.9rem' }}>{error}</div>}
+
+                    <form onSubmit={onSubmit}>
+                        <div className="form-group">
+                            <input
+                                className="form-control"
+                                type="text"
+                                name="name"
+                                placeholder="Full Name"
+                                onChange={onChange}
+                                required
+                            />
+                        </div>
+                        <div className="form-group">
+                            <input
+                                className="form-control"
+                                type="email"
+                                name="email"
+                                placeholder="Email Address"
+                                onChange={onChange}
+                                required
+                            />
+                        </div>
+                        <div className="form-group">
+                            <input
+                                className="form-control"
+                                type="password"
+                                name="password"
+                                placeholder="Password"
+                                onChange={onChange}
+                                required
+                            />
+                        </div>
+                        <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '10px' }}>
+                            Create Account
+                        </button>
+                    </form>
+
+                    <div className="auth-footer">
+                        Already have an account? <Link to="/login-affiliate" className="auth-link">Login here</Link>
+                    </div>
                 </div>
-                <div style={{ marginBottom: '10px' }}>
-                    <input type="email" name="email" placeholder="Email" onChange={onChange} required style={{ width: '100%', padding: '8px' }} />
-                </div>
-                <div style={{ marginBottom: '10px' }}>
-                    <input type="password" name="password" placeholder="Password" onChange={onChange} required style={{ width: '100%', padding: '8px' }} />
-                </div>
-                <button type="submit" style={{ width: '100%', padding: '10px', background: '#333', color: '#fff' }}>Register</button>
-            </form>
-            <p style={{ marginTop: '10px' }}><Link to="/login-affiliate">Login here</Link></p>
-        </div>
+            </div>
+        </>
     );
 };
 

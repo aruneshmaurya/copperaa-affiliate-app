@@ -321,6 +321,68 @@ const DashboardStyles = () => (
             font-weight: 500;
         }
 
+        /* Auth Pages */
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            background: var(--secondary-bg);
+        }
+        
+        .auth-card {
+            background: var(--white);
+            width: 100%;
+            max-width: 440px;
+            padding: 3rem 2.5rem;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            text-align: center;
+            border: 1px solid var(--border-light);
+        }
+        
+        .auth-logo {
+            max-width: 180px;
+            height: auto;
+            margin-bottom: 2rem;
+        }
+        
+        .auth-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+        
+        .auth-subtitle {
+            color: var(--text-gray);
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+        }
+        
+        .auth-footer {
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            color: var(--text-gray);
+        }
+        
+        .auth-link {
+            color: var(--primary-copper);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .auth-link:hover {
+            text-decoration: underline;
+        }
+        
+        /* Navbar Logo */
+        .navbar-brand-img {
+            height: 32px;
+            width: auto;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .navbar {
@@ -346,11 +408,23 @@ const DashboardStyles = () => (
             td, th {
                 padding: 0.75rem 1rem;
             }
+            
+            .auth-card {
+                padding: 2rem 1.5rem;
+            }
         }
         
         @media (max-width: 480px) {
             .stats-grid {
                 grid-template-columns: 1fr;
+            }
+            
+            .navbar-brand-img {
+                height: 24px;
+            }
+            
+            .user-greeting {
+                display: none;
             }
         }
     `}</style>

@@ -89,8 +89,13 @@ const AffiliateDashboard = () => {
             <DashboardStyles />
             <div className="app-wrapper">
                 {/* Navbar */}
+                import logo from '../assets/logo.png';
+
+                // ... (existing imports, but make sure logo is imported)
+
+                // Inside component return:
                 <nav className="navbar">
-                    <div className="navbar-brand">Copperaa Affiliate</div>
+                    <img src={logo} alt="Copperaa" className="navbar-brand-img" />
                     <div className="navbar-user">
                         <span className="user-greeting">Hi, {user.name}</span>
                         <button onClick={handleLogout} className="btn-logout" title="Logout">
