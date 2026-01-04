@@ -28,6 +28,10 @@ const AdminStyles = () => (
             --status-info-text: #1E40AF;
         }
 
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             background-color: var(--bg-body);
             color: var(--text-main);
@@ -60,8 +64,7 @@ const AdminStyles = () => (
         .admin-main {
             flex: 1;
             margin-left: 280px;
-            padding: 3rem;
-            max-width: 1600px;
+            padding: 2rem; /* Reduced from 3rem */
             width: calc(100% - 280px);
             color: var(--text-main);
         }
@@ -70,7 +73,7 @@ const AdminStyles = () => (
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 3rem;
+            margin-bottom: 2rem; /* Reduced from 3rem */
         }
 
         /* Sidebar Items */
