@@ -15,6 +15,7 @@ const Icons = {
 const AdminLayout = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const [sidebarOpen, setSidebarOpen] = React.useState(false);
 
     const handleLogout = () => {
         authService.logout();
@@ -31,24 +32,42 @@ const AdminLayout = () => {
         <div className="admin-layout">
             <AdminStyles />
 
+            {/* Mobile Sidebar Overlay */}
+            <div
+                className={`sidebar-overlay ${sidebarOpen ? 'open' : ''}`}
+                onClick={() => setSidebarOpen(false)}
+            />
+
             {/* Sidebar */}
-            <aside className="admin-sidebar">
+            <aside className={`admin-sidebar ${sidebarOpen ? 'open' : ''}`}>
                 <div className="sb-brand-container">
                     <img src={Logo} alt="Copperaa" className="sb-logo" />
                 </div>
                 <nav className="sb-nav">
                     <li className="sb-item">
-                        <NavLink to="/admin/dashboard" className={({ isActive }) => `sb-link ${isActive ? 'active' : ''}`}>
+                        <NavLink
+                            to="/admin/dashboard"
+                            className={({ isActive }) => `sb-link ${isActive ? 'active' : ''}`}
+                            onClick={() => setSidebarOpen(false)}
+                        >
                             <span className="sb-icon"><Icons.Dashboard /></span> Dashboard
                         </NavLink>
                     </li>
                     <li className="sb-item">
-                        <NavLink to="/admin/affiliates" className={({ isActive }) => `sb-link ${isActive ? 'active' : ''}`}>
+                        <NavLink
+                            to="/admin/affiliates"
+                            className={({ isActive }) => `sb-link ${isActive ? 'active' : ''}`}
+                            onClick={() => setSidebarOpen(false)}
+                        >
                             <span className="sb-icon"><Icons.Users /></span> Affiliates
                         </NavLink>
                     </li>
                     <li className="sb-item">
-                        <NavLink to="/admin/commissions" className={({ isActive }) => `sb-link ${isActive ? 'active' : ''}`}>
+                        <NavLink
+                            to="/admin/commissions"
+                            className={({ isActive }) => `sb-link ${isActive ? 'active' : ''}`}
+                            onClick={() => setSidebarOpen(false)}
+                        >
                             <span className="sb-icon"><Icons.Dollar /></span> Commissions
                         </NavLink>
                     </li>
@@ -65,10 +84,15 @@ const AdminLayout = () => {
             <main className="admin-main">
                 {/* Topbar */}
                 <div className="admin-topbar">
-                    <h1 style={{ fontSize: '1.5rem', fontWeight: 600, margin: 0 }}>{getPageTitle()}</h1>
-                    <div className="user-profile">
-                        <span style={{ fontWeight: 500, marginRight: '1rem' }}>Admin</span>
-                        <div style={{ width: 32, height: 32, background: '#B87333', borderRadius: '50%', display: 'inline-block', verticalAlign: 'middle' }}></div>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <button className="mobile-menu-btn" onClick={() => setSidebarOpen(true)}>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                        </button>
+                        <h1 style={{ fontSize: '1.5rem', fontWeight: 600, color: '#111827', margin: 0 }}>{getPageTitle()}</h1>
+                    </div>
+                    {/* Placeholder for admin profile or notification */}
+                    <div style={{ width: '40px', height: '40px', background: '#E5E7EB', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <span style={{ fontWeight: 600, color: '#4B5563' }}>AD</span>
                     </div>
                 </div>
 
