@@ -124,19 +124,31 @@ const AffiliateDashboard = () => {
                                 style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ddd' }}
                             >
                                 <option value="paypal">PayPal</option>
-                                <option value="stripe">Stripe</option>
+                                <option value="bank_transfer">Bank Transfer</option>
                             </select>
                         </div>
                         <div>
-                            <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold', color: '#555' }}>Payout Email</label>
-                            <input
-                                type="email"
-                                value={paymentEmail}
-                                onChange={(e) => setPaymentEmail(e.target.value)}
-                                placeholder="Enter your PayPal or Stripe email"
-                                required
-                                style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ddd' }}
-                            />
+                            <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold', color: '#555' }}>
+                                {paymentMethod === 'paypal' ? 'PayPal Email' : 'Bank Account Details'}
+                            </label>
+                            {paymentMethod === 'paypal' ? (
+                                <input
+                                    type="email"
+                                    value={paymentEmail}
+                                    onChange={(e) => setPaymentEmail(e.target.value)}
+                                    placeholder="Enter your PayPal email"
+                                    required
+                                    style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ddd' }}
+                                />
+                            ) : (
+                                <textarea
+                                    value={paymentEmail}
+                                    onChange={(e) => setPaymentEmail(e.target.value)}
+                                    placeholder="Bank Name, Account Number, Routing/Sort Code, SWIFT/IBAN"
+                                    required
+                                    style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ddd', minHeight: '80px', fontFamily: 'sans-serif' }}
+                                />
+                            )}
                         </div>
                         <button type="submit" style={{ padding: '10px 20px', background: '#28a745', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', alignSelf: 'flex-start' }}>
                             Save Payout Settings

@@ -47,7 +47,7 @@ const affiliateSchema = new mongoose.Schema({
     },
     paymentMethod: {
         type: String,
-        enum: ['paypal', 'stripe'],
+        enum: ['paypal', 'bank_transfer'],
         default: null
     },
     paymentEmail: {

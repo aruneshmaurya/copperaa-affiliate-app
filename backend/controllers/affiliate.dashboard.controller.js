@@ -61,7 +61,7 @@ const updatePaymentSettings = async (req, res) => {
     try {
         const { paymentMethod, paymentEmail } = req.body;
 
-        if (!['paypal', 'stripe'].includes(paymentMethod)) {
+        if (!['paypal', 'bank_transfer'].includes(paymentMethod)) {
             return res.status(400).json({ message: 'Invalid payment method' });
         }
         if (!paymentEmail) {
