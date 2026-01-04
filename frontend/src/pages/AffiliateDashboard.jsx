@@ -3,8 +3,9 @@ import api from '../services/api';
 import authService from '../services/auth.service';
 import { useNavigate } from 'react-router-dom';
 import DashboardStyles from '../components/DashboardStyles';
+import logo from '../assets/logo.png';
 
-// Simple Icons (using SVG directly to avoid dependencies)
+// ... (existing helper functions or components if any)
 const Icons = {
     Wallet: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4" /><path d="M3 5v14a2 2 0 0 0 2 2h16v-5" /><path d="M18 12a2 2 0 0 0 0 4h4v-4Z" /></svg>,
     CheckCircle: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg>,
@@ -89,11 +90,6 @@ const AffiliateDashboard = () => {
             <DashboardStyles />
             <div className="app-wrapper">
                 {/* Navbar */}
-                import logo from '../assets/logo.png';
-
-                // ... (existing imports, but make sure logo is imported)
-
-                // Inside component return:
                 <nav className="navbar">
                     <img src={logo} alt="Copperaa" className="navbar-brand-img" />
                     <div className="navbar-user">
