@@ -167,6 +167,17 @@ const DashboardStyles = () => (
             grid-column: span 2;
         }
 
+        .col-span-2 {
+            grid-column: span 2;
+        }
+
+        .referral-actions-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
         /* Forms & Inputs */
         .form-group {
             margin-bottom: 1.25rem;
@@ -432,7 +443,7 @@ const DashboardStyles = () => (
             }
             
             /* Forms one column */
-            .form-row, .grid-2-col {
+            .form-row, .grid-2-col, .referral-actions-grid {
                 grid-template-columns: 1fr;
             }
             .col-span-2 {

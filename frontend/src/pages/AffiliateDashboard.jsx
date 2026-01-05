@@ -89,7 +89,7 @@ const AffiliateDashboard = () => {
             </div>
 
             {/* 2. Referral & Quick Actions */}
-            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '2rem', marginBottom: '3rem' }}>
+            <div className="referral-actions-grid">
                 {/* Referral Card */}
                 <div className="card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', borderColor: '#B87333', borderWidth: '1px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
