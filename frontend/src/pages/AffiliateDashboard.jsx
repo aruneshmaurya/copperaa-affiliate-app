@@ -159,7 +159,7 @@ const AffiliateDashboard = () => {
                                             comm.status === 'approved' ? 'info' :
                                                 comm.status === 'cancelled' ? 'error' : 'warning'
                                             }`}>
-                                            {comm.status}
+                                            {comm.status === 'approved' ? 'Upcoming Payout' : comm.status}
                                         </span>
                                     </td>
                                     <td style={{ color: '#6B7280' }}>{new Date(comm.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}</td>

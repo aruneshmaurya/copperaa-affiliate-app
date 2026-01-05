@@ -8,7 +8,7 @@ const Commission = require('../models/Commission');
 const getCommissions = async (req, res) => {
     try {
         const commissions = await Commission.find({})
-            .populate('affiliate', 'name email affiliateCode')
+            .populate('affiliate', 'name email affiliateCode payoutSettings')
             .sort({ createdAt: -1 });
 
         res.status(200).json(commissions);
