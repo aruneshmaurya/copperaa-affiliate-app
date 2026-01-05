@@ -48,11 +48,16 @@ const AffiliateLayout = () => {
             <main className="admin-main">
                 {/* Desktop Header */}
                 <div className="admin-topbar">
-                    <h2 style={{ fontSize: '1.5rem', margin: 0, fontWeight: 700, color: '#111827' }}>Affiliate Dashboard</h2>
+                    <div>
+                        <h2 style={{ fontSize: '1.5rem', margin: 0, fontWeight: 700, color: '#111827' }}>Affiliate Dashboard</h2>
+                        <div style={{ fontSize: '0.85rem', color: '#6B7280', display: window.innerWidth < 768 ? 'block' : 'none', marginTop: '4px' }}>
+                            Welcome back, {user.name.split(' ')[0]}
+                        </div>
+                    </div>
 
                     {/* User Profile Dropdown / Area */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', background: 'white', padding: '0.5rem 1rem', borderRadius: '50px', boxShadow: '0 2px 5px rgba(0,0,0,0.05)', border: '1px solid #E5E7EB' }}>
-                        <div style={{ textAlign: 'right' }}>
+                        <div style={{ textAlign: 'right', display: window.innerWidth < 480 ? 'none' : 'block' }}>
                             <div style={{ fontWeight: 600, fontSize: '0.9rem', color: '#1F2937' }}>{user.name}</div>
                             <div style={{ fontSize: '0.75rem', color: '#6B7280' }}>Code: {user.affiliateCode}</div>
                         </div>
@@ -63,6 +68,22 @@ const AffiliateLayout = () => {
                 </div>
                 <Outlet />
             </main>
+
+            {/* Mobile Bottom Navigation */}
+            <nav className="bottom-nav">
+                <NavLink to="/affiliate/dashboard" end className={({ isActive }) => `bn-item ${isActive ? 'active' : ''}`}>
+                    <span className="bn-icon"><Icons.Home /></span>
+                    <span>Overview</span>
+                </NavLink>
+                <NavLink to="/affiliate/settings" className={({ isActive }) => `bn-item ${isActive ? 'active' : ''}`}>
+                    <span className="bn-icon"><Icons.Settings /></span>
+                    <span>Settings</span>
+                </NavLink>
+                <button onClick={handleLogout} className="bn-item" style={{ background: 'transparent', border: 'none', cursor: 'pointer' }}>
+                    <span className="bn-icon" style={{ color: '#EF4444' }}><Icons.Logout /></span>
+                    <span style={{ color: '#EF4444' }}>Logout</span>
+                </button>
+            </nav>
         </div>
     );
 };

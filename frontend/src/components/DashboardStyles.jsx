@@ -158,6 +158,15 @@ const DashboardStyles = () => (
             color: var(--text-gray);
         }
 
+        /* Utility Classes */
+        .grid-2-col {
+            grid-template-columns: 1fr 1fr;
+        }
+        
+        .col-span-2 {
+            grid-column: span 2;
+        }
+
         /* Forms & Inputs */
         .form-group {
             margin-bottom: 1.25rem;
@@ -383,49 +392,72 @@ const DashboardStyles = () => (
             width: auto;
         }
 
-        /* Responsive */
+        /* Responsive Dashboard Styles */
+        @media (max-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: 1fr 1fr; /* 2x2 on Tablet */
+            }
+        }
+
         @media (max-width: 768px) {
             .navbar {
                 padding: 0 1rem;
+                height: 60px;
             }
-            
             .dashboard-container {
-                padding: 1.5rem 1rem;
+                padding: 1rem;
+                padding-bottom: 5rem; /* Space for bottom nav */
             }
-            
             .stats-grid {
                 grid-template-columns: 1fr 1fr;
+                gap: 1rem;
+            }
+            .stat-card {
+                padding: 1rem;
+            }
+            .stat-value {
+                font-size: 1.5rem;
             }
             
+            /* Stack Input Groups (Referral Link) */
             .input-group {
                 flex-direction: column;
+                gap: 1rem;
             }
-            
             .btn-copy {
                 width: 100%;
+                position: sticky;
+                bottom: 1rem; /* Sticky support if container allows */
+                z-index: 10;
             }
             
-            td, th {
-                padding: 0.75rem 1rem;
+            /* Forms one column */
+            .form-row, .grid-2-col {
+                grid-template-columns: 1fr;
+            }
+            .col-span-2 {
+                grid-column: auto; /* Reset span on mobile */
             }
             
-            .auth-card {
-                padding: 2rem 1.5rem;
+            /* Cards */
+            .card {
+                padding: 1.5rem;
             }
         }
         
         @media (max-width: 480px) {
             .stats-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr; /* 1 col on Mobile */
             }
-            
-            .navbar-brand-img {
-                height: 24px;
+            .navbar-brand {
+                font-size: 1.1rem;
             }
-            
             .user-greeting {
-                display: none;
+                display: none; /* Hide greeting on mobile */
             }
+            .navbar-user {
+                gap: 0.5rem;
+            } 
         }
     `}</style>
 );

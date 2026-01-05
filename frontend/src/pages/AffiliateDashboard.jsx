@@ -151,10 +151,10 @@ const AffiliateDashboard = () => {
                         ) : (
                             commissions.map(comm => (
                                 <tr key={comm._id}>
-                                    <td style={{ fontWeight: 600, fontFamily: 'monospace' }}>#{comm.orderId}</td>
-                                    <td>${comm.orderSubtotal}</td>
-                                    <td style={{ fontWeight: 700, color: '#B87333' }}>${comm.commissionAmount}</td>
-                                    <td>
+                                    <td data-label="Order ID" style={{ fontWeight: 600, fontFamily: 'monospace' }}>#{comm.orderId}</td>
+                                    <td data-label="Subtotal">${comm.orderSubtotal}</td>
+                                    <td data-label="Commission" style={{ fontWeight: 700, color: '#B87333' }}>${comm.commissionAmount}</td>
+                                    <td data-label="Status">
                                         <span className={`badge ${comm.status === 'paid' ? 'success' :
                                             comm.status === 'approved' ? 'info' :
                                                 comm.status === 'cancelled' ? 'error' : 'warning'
@@ -162,7 +162,7 @@ const AffiliateDashboard = () => {
                                             {comm.status === 'approved' ? 'Upcoming Payout' : comm.status}
                                         </span>
                                     </td>
-                                    <td style={{ color: '#6B7280' }}>{new Date(comm.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}</td>
+                                    <td data-label="Date" style={{ color: '#6B7280' }}>{new Date(comm.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}</td>
                                 </tr>
                             ))
                         )}

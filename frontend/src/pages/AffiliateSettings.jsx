@@ -100,7 +100,7 @@ const AffiliateSettings = () => {
                             />
                         </div>
                     ) : (
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                        <div className="grid-2-col" style={{ display: 'grid', gap: '1.5rem' }}>
                             <div className="form-group">
                                 <label className="form-label">Account Holder Name *</label>
                                 <input
@@ -121,7 +121,7 @@ const AffiliateSettings = () => {
                                     className="form-control"
                                 />
                             </div>
-                            <div className="form-group" style={{ gridColumn: 'span 2' }}>
+                            <div className="form-group col-span-2">
                                 <label className="form-label">Account Number *</label>
                                 <input
                                     type="text"
@@ -152,7 +152,7 @@ const AffiliateSettings = () => {
                                     className="form-control"
                                 />
                             </div>
-                            <div className="form-group" style={{ gridColumn: 'span 2' }}>
+                            <div className="form-group col-span-2">
                                 <label className="form-label">SWIFT / IBAN (Optional)</label>
                                 <input
                                     type="text"

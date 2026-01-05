@@ -365,6 +365,158 @@ const AdminStyles = () => (
             box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
         }
 
+
+        /* Responsive Layout */
+        @media (max-width: 1024px) {
+            .admin-sidebar {
+                width: 80px;
+            }
+            .admin-main {
+                margin-left: 80px;
+                width: calc(100% - 80px);
+                padding: 1.5rem;
+            }
+            .sb-brand-container {
+                padding: 1.5rem 0.5rem;
+            }
+            .sb-logo {
+                display: none; /* Hide full logo */
+            }
+            .sb-brand-container::after {
+                content: 'C'; /* Initials or Icon */
+                font-size: 1.5rem;
+                font-weight: 700;
+                color: var(--primary);
+            }
+            .sb-link {
+                justify-content: center;
+                padding: 1rem 0.5rem;
+            }
+            .sb-icon {
+                margin-right: 0;
+            }
+            .sb-link span:not(.sb-icon), .sb-item button span:not(.sb-icon) {
+                 /* Text inside link */
+                 display: none;
+            }
+             /* Specifically target the text node if it's not wrapped in span, 
+                current structure is <span class="sb-icon"></span> Text 
+                so we might need to rely on the fact that only icon is visible
+             */
+             .sb-link {
+                 font-size: 0; /* Hide text */
+             }
+             .sb-icon {
+                 margin: 0;
+             }
+        }
+
+        @media (max-width: 768px) {
+            .admin-sidebar {
+                display: none; /* Hide sidebar completely on mobile */
+            }
+            .admin-main {
+                margin-left: 0;
+                width: 100%;
+                padding: 1rem;
+                padding-bottom: 80px; /* Space for bottom nav */
+            }
+            .admin-topbar {
+                margin-bottom: 1.5rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            .stat-grid {
+                grid-template-columns: 1fr 1fr; /* 2 cols on mobile */
+                gap: 1rem;
+            }
+            
+            /* Mobile Table Card View */
+            .data-table thead {
+                display: none;
+            }
+            .data-table, .data-table tbody, .data-table tr, .data-table td {
+                display: block;
+                width: 100%;
+            }
+            .data-table tr {
+                margin-bottom: 1rem;
+                background: white;
+                border: 1px solid #E5E7EB;
+                border-radius: 12px;
+                padding: 1rem;
+            }
+            .data-table td {
+                padding: 0.5rem 0;
+                border-bottom: 1px solid #F3F4F6;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                text-align: right;
+            }
+            .data-table td::before {
+                content: attr(data-label);
+                font-weight: 600;
+                color: var(--text-muted);
+                font-size: 0.85rem;
+                text-transform: uppercase;
+                margin-right: 1rem;
+            }
+            .data-table td:last-child {
+                border-bottom: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stat-grid {
+                grid-template-columns: 1fr; /* 1 col on very small screens */
+            }
+            .admin-topbar h2 {
+                font-size: 1.25rem;
+            }
+        }
+
+        /* Bottom Nav (Mobile Only) */
+        .bottom-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #E5E7EB;
+            padding: 0.75rem 1rem;
+            justify-content: space-around;
+            z-index: 999; /* High z-index */
+            box-shadow: 0 -4px 6px -1px rgba(0,0,0,0.05);
+        }
+        
+        @media (max-width: 768px) {
+            .bottom-nav {
+                display: flex;
+            }
+        }
+
+        .bn-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            gap: 4px;
+        }
+        
+        .bn-item.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .bn-icon {
+            width: 24px;
+            height: 24px;
+        }
     `}</style>
 );
 
