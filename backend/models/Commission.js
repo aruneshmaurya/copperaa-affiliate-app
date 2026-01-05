@@ -26,7 +26,7 @@ const commissionSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['pending', 'approved', 'reversed'],
+        enum: ['pending', 'approved', 'reversed', 'paid'],
         default: 'pending',
         index: true
     }
