@@ -20,11 +20,11 @@ const getStats = async (req, res) => {
         }, 0);
 
         const unpaidEarnings = commissions.reduce((acc, comm) => {
-            return comm.status === 'pending' || comm.status === 'unpaid' ? acc + comm.commissionAmount : acc;
+            return comm.status === 'pending' || comm.status === 'approved' ? acc + comm.commissionAmount : acc;
         }, 0);
 
         const paidEarnings = commissions.reduce((acc, comm) => {
-            return comm.status === 'approved' || comm.status === 'paid' ? acc + comm.commissionAmount : acc;
+            return comm.status === 'paid' ? acc + comm.commissionAmount : acc;
         }, 0);
 
         res.json({
