@@ -452,7 +452,7 @@ const DashboardStyles = () => (
             
             /* Cards */
             .card {
-                padding: 1.5rem;
+                padding: 1.25rem;
             }
         }
         

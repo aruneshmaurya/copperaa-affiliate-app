@@ -102,11 +102,11 @@ const AffiliateDashboard = () => {
                         <div className="badge info" style={{ fontSize: '0.85rem' }}>Active Campaign</div>
                     </div>
 
-                    <div style={{ display: 'flex', gap: '1rem' }}>
-                        <div style={{ flex: 1, background: '#F3F4F6', padding: '0.85rem 1rem', borderRadius: '10px', border: '1px solid #E5E7EB', fontFamily: 'monospace', fontWeight: 600, color: '#374151', display: 'flex', alignItems: 'center' }}>
+                    <div className="input-group">
+                        <div style={{ flex: 1, background: '#F3F4F6', padding: '0.85rem 1rem', borderRadius: '10px', border: '1px solid #E5E7EB', fontFamily: 'monospace', fontWeight: 600, color: '#374151', display: 'flex', alignItems: 'center', overflowX: 'auto' }}>
                             {referralLink}
                         </div>
-                        <button onClick={copyLink} className="btn btn-primary" style={{ minWidth: '140px' }}>
+                        <button onClick={copyLink} className="btn btn-primary btn-copy" style={{ minWidth: '140px' }}>
                             <Icons.Copy /> {copyState}
                         </button>
                     </div>
