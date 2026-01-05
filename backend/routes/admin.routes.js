@@ -4,7 +4,8 @@ const {
     getAffiliates,
     approveAffiliate,
     disableAffiliate,
-    updateCommission
+    updateCommission,
+    deleteAffiliate
 } = require('../controllers/admin.controller');
 const { protect, admin } = require('../middleware/auth.middleware');
 
@@ -24,6 +25,7 @@ router.get('/affiliates', getAffiliates);
 router.patch('/affiliates/:id/approve', validateObjectId, approveAffiliate);
 router.patch('/affiliates/:id/disable', validateObjectId, disableAffiliate);
 router.patch('/affiliates/:id/commission', validateObjectId, updateCommission);
+router.delete('/affiliates/:id', validateObjectId, deleteAffiliate);
 
 // Commission Routes
 router.get('/commissions', getCommissions);

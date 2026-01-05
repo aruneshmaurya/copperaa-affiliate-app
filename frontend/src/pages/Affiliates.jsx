@@ -5,7 +5,8 @@ const Icons = {
     Check: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>,
     X: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>,
     Eye: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>,
-    Edit: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+    Edit: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>,
+    Trash: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
 };
 
 const Affiliates = () => {
@@ -43,6 +44,17 @@ const Affiliates = () => {
         if (window.confirm('Disable this affiliate?')) {
             try {
                 await api.patch(`/admin/affiliates/${id}/disable`);
+                fetchAffiliates();
+            } catch (err) {
+                alert(err.message);
+            }
+        }
+    };
+
+    const handleDelete = async (id) => {
+        if (window.confirm('Are you sure you want to permanently delete this affiliate? This action cannot be undone.')) {
+            try {
+                await api.delete(`/admin/affiliates/${id}`);
                 fetchAffiliates();
             } catch (err) {
                 alert(err.message);
@@ -119,6 +131,9 @@ const Affiliates = () => {
                                         )}
                                         <button className="btn-icon" onClick={() => handleCommission(aff._id, aff.commissionRate)} title="Set Rate">
                                             <Icons.Edit />
+                                        </button>
+                                        <button className="btn-icon" style={{ color: '#DC2626' }} onClick={() => handleDelete(aff._id)} title="Delete Permanently">
+                                            <Icons.Trash />
                                         </button>
                                     </div>
                                 </td>

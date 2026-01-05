@@ -110,9 +110,30 @@ const updateCommission = async (req, res) => {
     }
 };
 
+// @desc    Delete an affiliate
+// @route   DELETE /api/admin/affiliates/:id
+// @access  Private/Admin
+const deleteAffiliate = async (req, res) => {
+    try {
+        const affiliate = await Affiliate.findById(req.params.id);
+
+        if (!affiliate) {
+            res.status(404);
+            throw new Error('Affiliate not found');
+        }
+
+        await Affiliate.deleteOne({ _id: affiliate._id });
+
+        res.status(200).json({ message: 'Affiliate removed' });
+    } catch (error) {
+        res.status(res.statusCode === 200 ? 500 : res.statusCode).json({ message: error.message });
+    }
+};
+
 module.exports = {
     getAffiliates,
     approveAffiliate,
     disableAffiliate,
-    updateCommission
+    updateCommission,
+    deleteAffiliate
 };
